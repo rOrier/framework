@@ -1,0 +1,21 @@
+{
+    "name": "rorier/framework",
+    "description": "Global package to coordinate other stand alone packages.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Raphael Aurieres",
+            "email": "raphael.aurieres@gmail.com"
+        }
+    ],
+    "require": {
+        "rorier/services": "^0.1",
+        "php": ">= 7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "ROrier\\Framework\\": "src/"
+        }
+    }
+}
