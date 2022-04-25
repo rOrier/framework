@@ -10,6 +10,8 @@ class App
 {
     private string $root;
 
+    private Kernel $kernel;
+
     private ParametersInterface $parameters;
 
     private ContainerInterface $container;
@@ -17,6 +19,17 @@ class App
     public function __construct(string $root)
     {
         $this->root = $root;
+    }
+
+    /**
+     * @param Kernel $kernel
+     * @return self
+     */
+    public function setKernel(Kernel $kernel): self
+    {
+        $this->kernel = $kernel;
+
+        return $this;
     }
 
     /**
@@ -47,6 +60,19 @@ class App
     public function getRoot(): string
     {
         return $this->root;
+    }
+
+    /**
+     * @return Kernel
+     * @throws Exception
+     */
+    public function getKernel(): Kernel
+    {
+        if (!isset($this->kernel)) {
+            throw new Exception("No kernel defined.");
+        }
+
+        return $this->kernel;
     }
 
     /**
