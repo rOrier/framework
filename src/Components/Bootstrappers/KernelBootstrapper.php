@@ -3,9 +3,12 @@
 namespace ROrier\Core\Components\Bootstrappers;
 
 use Exception;
+use ROrier\Config\ConfigPackage;
 use ROrier\Core\Components\Kernel;
+use ROrier\Core\CorePackage;
 use ROrier\Core\Foundations\AbstractBootstrapper;
 use ROrier\Core\Interfaces\PackageInterface;
+use ROrier\Services\ContainerPackage;
 
 class KernelBootstrapper extends AbstractBootstrapper
 {
@@ -16,7 +19,11 @@ class KernelBootstrapper extends AbstractBootstrapper
      */
     public function buildKernel(array $packages): ParametersBootstrapper
     {
-        $kernel = new Kernel();
+        $kernel = (new Kernel())
+            ->addPackage(new CorePackage())
+            ->addPackage(new ContainerPackage())
+            ->addPackage(new ConfigPackage())
+        ;
 
         foreach ($packages as $package) {
             $kernel->addPackage($package);
