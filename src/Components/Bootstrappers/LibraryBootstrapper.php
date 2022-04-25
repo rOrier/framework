@@ -40,9 +40,6 @@ class LibraryBootstrapper extends AbstractBootstrapper
     {
         $data = [];
 
-        $this->preloadData($data, 'fixed.json');
-        $this->preloadData($data, 'abstract.json');
-
         /** @var PackageInterface $package */
         foreach ($this->getKernel()->getPackages() as $package) {
             CollectionTool::merge($data, $package->buildServices());
@@ -53,13 +50,6 @@ class LibraryBootstrapper extends AbstractBootstrapper
         }
 
         return $data;
-    }
-
-    protected function preloadData(array &$data, $filename)
-    {
-        $path = realpath(__DIR__ . "/../../../../services/config/services/$filename");
-
-        CollectionTool::merge($data, json_decode(file_get_contents($path), true));
     }
 
     protected function buildSpecCompilator()
