@@ -18,4 +18,14 @@ interface PackageInterface
      * @return string
      */
     public function getConfigPath(): string;
+
+    /**
+     * @return array
+     */
+    public function buildParameters(): array;
+
+    /**
+     * @return array
+     */
+    public function buildServices(): array;
 }
