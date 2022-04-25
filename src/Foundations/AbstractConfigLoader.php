@@ -31,6 +31,7 @@ abstract class AbstractConfigLoader implements ConfigLoaderInterface
             ->in($path)
             ->files()
             ->name(static::FILE_PATTERN)
+            ->sortByName()
         ;
 
         return array_keys(iterator_to_array($finder));
