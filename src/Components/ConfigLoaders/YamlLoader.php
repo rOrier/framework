@@ -7,7 +7,7 @@ use Symfony\Component\Yaml\Yaml;
 
 class YamlLoader extends AbstractConfigLoader
 {
-    protected const EXT = 'yaml';
+    protected const FILE_PATTERN = '/.*\.(yml|yaml)/';
 
     protected function parseFile(string $path): array
     {

@@ -12,20 +12,25 @@ use ROrier\Container\ContainerPackage;
 
 class KernelBootstrapper extends AbstractBootstrapper
 {
+    private array $coreClassNames = [
+        CorePackage::class,
+        ContainerPackage::class,
+        ConfigPackage::class
+    ];
+
     /**
-     * @param PackageInterface[] $packages
+     * @param string[] $userClassNames
      * @return ParametersBootstrapper
      * @throws Exception
      */
-    public function buildKernel(array $packages): ParametersBootstrapper
+    public function buildKernel(array $userClassNames): ParametersBootstrapper
     {
-        $kernel = (new Kernel())
-            ->addPackage(new CorePackage())
-            ->addPackage(new ContainerPackage())
-            ->addPackage(new ConfigPackage())
-        ;
+        $kernel = new Kernel();
 
-        foreach ($packages as $package) {
+        $classNames = array_merge($this->coreClassNames, $userClassNames);
+
+        foreach ($classNames as $className) {
+            $package = new $className();
             $kernel->addPackage($package);
         }
 
