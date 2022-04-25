@@ -10,7 +10,7 @@ class AppBootstrapper extends AbstractBootstrapper
 {
     private string $root;
 
-    public function createApp(string $root): ParametersBootstrapper
+    public function createApp(string $root): KernelBootstrapper
     {
         if (!is_dir($root)) {
             throw new Exception("Root folder not found : $root");
@@ -18,6 +18,6 @@ class AppBootstrapper extends AbstractBootstrapper
 
         $this->boot['app'] = new App($root);
 
-        return new ParametersBootstrapper($this->boot);
+        return new KernelBootstrapper($this->boot);
     }
 }
