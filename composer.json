@@ -1,5 +1,5 @@
 {
-    "name": "rorier/framework",
+    "name": "rorier/core",
     "description": "Global package to coordinate other stand alone packages.",
     "type": "library",
     "license": "MIT",
@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "ROrier\\Framework\\": "src/"
+            "ROrier\\Core\\": "src/"
         }
     }
 }
