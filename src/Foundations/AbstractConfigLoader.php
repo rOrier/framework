@@ -8,13 +8,13 @@ use Symfony\Component\Finder\Finder;
 
 abstract class AbstractConfigLoader implements ConfigLoaderInterface
 {
-    protected const EXT = null;
+    protected const FILE_PATTERN = null;
 
     public function load(string $path): array
     {
         $data = [];
 
-        $filenames = $this->findFiles($path, static::EXT);
+        $filenames = $this->findFiles($path);
 
         foreach ($filenames as $filename) {
             CollectionTool::merge($data, $this->parseFile($filename));
@@ -23,14 +23,14 @@ abstract class AbstractConfigLoader implements ConfigLoaderInterface
         return $data;
     }
 
-    protected function findFiles($path, string $ext)
+    protected function findFiles($path)
     {
         $finder = new Finder();
 
         $finder
             ->in($path)
             ->files()
-            ->name("*.$ext")
+            ->name(static::FILE_PATTERN)
         ;
 
         return array_keys(iterator_to_array($finder));

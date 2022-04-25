@@ -6,7 +6,7 @@ use ROrier\Core\Foundations\AbstractConfigLoader;
 
 class JsonLoader extends AbstractConfigLoader
 {
-    protected const EXT = 'json';
+    protected const FILE_PATTERN = '*.json';
 
     protected function parseFile(string $path): array
     {
