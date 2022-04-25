@@ -8,7 +8,7 @@ use ROrier\Core\Interfaces\PackageInterface;
 
 abstract class AbstractPackage implements PackageInterface
 {
-    protected const CONFIG_LOADER = 'ROrier\Core\Components\ConfigLoaders\JsonLoader';
+    protected const CONFIG_LOADER = 'ROrier\Core\Components\ConfigLoaders\YamlLoader';
 
     private string $root;
 
