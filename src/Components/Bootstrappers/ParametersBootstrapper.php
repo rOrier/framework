@@ -11,6 +11,8 @@ use ROrier\Config\Services\ConfigParsers\StringParameterParser;
 use ROrier\Config\Services\DelayedProxies\ParametersProxy;
 use ROrier\Config\Services\Parameters;
 use ROrier\Core\Foundations\AbstractBootstrapper;
+use ROrier\Core\Interfaces\KernelInterface;
+use ROrier\Core\Interfaces\PackageInterface;
 
 class ParametersBootstrapper extends AbstractBootstrapper
 {
@@ -45,6 +47,11 @@ class ParametersBootstrapper extends AbstractBootstrapper
     {
         $data = new Bag();
 
+        /** @var PackageInterface $package */
+        foreach ($this->getKernel()->getPackages() as $package) {
+            $data->merge($package->buildParameters());
+        }
+
         foreach ($this->additionalData as $additionalData) {
             $data->merge($additionalData);
         }
@@ -74,5 +81,10 @@ class ParametersBootstrapper extends AbstractBootstrapper
         }
 
         return $delayedParameters;
+    }
+
+    protected function getKernel(): KernelInterface
+    {
+        return $this->boot['kernel'];
     }
 }

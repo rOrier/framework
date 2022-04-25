@@ -4,6 +4,8 @@ namespace ROrier\Core\Components\Bootstrappers;
 
 use ROrier\Config\Tools\CollectionTool;
 use ROrier\Core\Foundations\AbstractBootstrapper;
+use ROrier\Core\Interfaces\KernelInterface;
+use ROrier\Core\Interfaces\PackageInterface;
 use ROrier\Services\Services\Compilator;
 use ROrier\Services\Services\Libraries\ServiceLibrary;
 use ROrier\Services\Services\ServiceSpecCompilers\FactoryCompiler;
@@ -41,6 +43,11 @@ class LibraryBootstrapper extends AbstractBootstrapper
         $this->preloadData($data, 'fixed.json');
         $this->preloadData($data, 'abstract.json');
 
+        /** @var PackageInterface $package */
+        foreach ($this->getKernel()->getPackages() as $package) {
+            CollectionTool::merge($data, $package->buildServices());
+        }
+
         foreach ($this->additionalData as $additionalData) {
             CollectionTool::merge($data, $additionalData);
         }
@@ -61,5 +68,10 @@ class LibraryBootstrapper extends AbstractBootstrapper
             new InheritanceCompiler(),
             new FactoryCompiler()
         ]);
+    }
+
+    protected function getKernel(): KernelInterface
+    {
+        return $this->boot['kernel'];
     }
 }
