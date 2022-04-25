@@ -6,10 +6,10 @@ use ROrier\Config\Tools\CollectionTool;
 use ROrier\Core\Foundations\AbstractBootstrapper;
 use ROrier\Core\Interfaces\KernelInterface;
 use ROrier\Core\Interfaces\PackageInterface;
-use ROrier\Services\Services\Compilator;
-use ROrier\Services\Services\Libraries\ServiceLibrary;
-use ROrier\Services\Services\ServiceSpecCompilers\FactoryCompiler;
-use ROrier\Services\Services\ServiceSpecCompilers\InheritanceCompiler;
+use ROrier\Container\Services\Compilator;
+use ROrier\Container\Services\Libraries\ServiceLibrary;
+use ROrier\Container\Services\ServiceSpecCompilers\FactoryCompiler;
+use ROrier\Container\Services\ServiceSpecCompilers\InheritanceCompiler;
 
 class LibraryBootstrapper extends AbstractBootstrapper
 {

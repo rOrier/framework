@@ -6,8 +6,8 @@ use ROrier\Config\Interfaces\ParametersInterface;
 use ROrier\Core\Components\App;
 use ROrier\Core\Foundations\AbstractBootstrapper;
 use ROrier\Core\Interfaces\KernelInterface;
-use ROrier\Services\Exceptions\ContainerException;
-use ROrier\Services\Interfaces\ContainerInterface;
+use ROrier\Container\Exceptions\ContainerException;
+use ROrier\Container\Interfaces\ContainerInterface;
 
 class StubBootstrapper extends AbstractBootstrapper
 {

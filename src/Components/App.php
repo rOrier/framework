@@ -4,7 +4,7 @@ namespace ROrier\Core\Components;
 
 use Exception;
 use ROrier\Config\Interfaces\ParametersInterface;
-use ROrier\Services\Interfaces\ContainerInterface;
+use ROrier\Container\Interfaces\ContainerInterface;
 
 class App
 {

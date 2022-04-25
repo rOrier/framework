@@ -8,7 +8,7 @@ use ROrier\Core\Components\Kernel;
 use ROrier\Core\CorePackage;
 use ROrier\Core\Foundations\AbstractBootstrapper;
 use ROrier\Core\Interfaces\PackageInterface;
-use ROrier\Services\ContainerPackage;
+use ROrier\Container\ContainerPackage;
 
 class KernelBootstrapper extends AbstractBootstrapper
 {
