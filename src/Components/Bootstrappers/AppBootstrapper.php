@@ -77,16 +77,25 @@ class AppBootstrapper extends AbstractBootstrapper
         }
     }
 
+    /**
+     * @return KernelInterface
+     */
     protected function getKernel(): KernelInterface
     {
         return $this->boot['kernel'];
     }
 
+    /**
+     * @return ContainerInterface
+     */
     protected function getContainer(): ContainerInterface
     {
         return $this->boot['container'];
     }
 
+    /**
+     * @return ParametersInterface
+     */
     protected function getParameters(): ParametersInterface
     {
         return $this->boot['parameters'];
