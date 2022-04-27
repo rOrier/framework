@@ -5,12 +5,13 @@ namespace ROrier\Core\Components;
 use Exception;
 use ROrier\Config\Interfaces\ParametersInterface;
 use ROrier\Container\Interfaces\ContainerInterface;
+use ROrier\Core\Interfaces\KernelInterface;
 
 class App
 {
     private string $root;
 
-    private Kernel $kernel;
+    private KernelInterface $kernel;
 
     private ParametersInterface $parameters;
 
@@ -22,10 +23,10 @@ class App
     }
 
     /**
-     * @param Kernel $kernel
+     * @param KernelInterface $kernel
      * @return self
      */
-    public function setKernel(Kernel $kernel): self
+    public function setKernel(KernelInterface $kernel): self
     {
         $this->kernel = $kernel;
 
@@ -63,10 +64,10 @@ class App
     }
 
     /**
-     * @return Kernel
+     * @return KernelInterface
      * @throws Exception
      */
-    public function getKernel(): Kernel
+    public function getKernel(): KernelInterface
     {
         if (!isset($this->kernel)) {
             throw new Exception("No kernel defined.");
