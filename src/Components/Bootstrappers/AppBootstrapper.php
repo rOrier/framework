@@ -16,8 +16,13 @@ class AppBootstrapper extends AbstractBootstrapper
             throw new Exception("Root folder not found : $root");
         }
 
-        $this->boot['app'] = new App($root);
+        $this->boot['app'] = $this->buildApp($root);
 
         return new KernelBootstrapper($this->boot);
+    }
+
+    protected function buildApp(string $root)
+    {
+        return new App($root);
     }
 }
