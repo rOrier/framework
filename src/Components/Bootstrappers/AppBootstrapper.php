@@ -4,8 +4,6 @@ namespace ROrier\Core\Components\Bootstrappers;
 
 use Exception;
 use ROrier\Config\Interfaces\ParametersInterface;
-use ROrier\Core\Components\GlobalApp;
-use ROrier\Core\Components\LocalApp;
 use ROrier\Core\Foundations\AbstractBootstrapper;
 use ROrier\Core\Interfaces\AppInterface;
 use ROrier\Core\Interfaces\KernelInterface;
@@ -14,6 +12,9 @@ use ROrier\Container\Interfaces\ContainerInterface;
 
 class AppBootstrapper extends AbstractBootstrapper
 {
+    private const DEFAULT_LOCAL_APP = 'ROrier\Core\Components\LocalApp';
+    private const DEFAULT_GLOBAL_APP = 'ROrier\Core\Components\GlobalApp';
+
     private array $knownServices = [
         'container',
         'parameters',
@@ -27,14 +28,15 @@ class AppBootstrapper extends AbstractBootstrapper
     ];
 
     /**
+     * @param string $className
      * @return AppInterface
      * @throws ContainerException
      */
-    public function buildLocalApp(): AppInterface
+    public function buildLocalApp(string $className = self::DEFAULT_LOCAL_APP): AppInterface
     {
         $this->saveKnownServices();
 
-        return new LocalApp(
+        return new $className(
             $this->boot['root'],
             $this->getKernel(),
             $this->getParameters(),
@@ -43,22 +45,22 @@ class AppBootstrapper extends AbstractBootstrapper
     }
 
     /**
+     * @param string $className
      * @return AppInterface
      * @throws ContainerException
-     * @throws Exception
      */
-    public function buildGlobalApp(): AppInterface
+    public function buildGlobalApp(string $className = self::DEFAULT_GLOBAL_APP): AppInterface
     {
         $this->saveKnownServices();
 
-        GlobalApp::init(
+        $className::init(
             $this->boot['root'],
             $this->getKernel(),
             $this->getParameters(),
             $this->getContainer()
         );
 
-        return GlobalApp::getInstance();
+        return $className::getInstance();
     }
 
     /**
