@@ -3,6 +3,7 @@
 namespace ROrier\Core\Components\Bootstrappers;
 
 use ROrier\Config\Interfaces\ParametersInterface;
+use ROrier\Core\Components\LocalApp;
 use ROrier\Core\Foundations\AbstractBootstrapper;
 use ROrier\Core\Interfaces\AppInterface;
 use ROrier\Core\Interfaces\KernelInterface;
@@ -69,6 +70,6 @@ class StubBootstrapper extends AbstractBootstrapper
 
     protected function getApp(): AppInterface
     {
-        return $this->boot['app'];
+        return new LocalApp($this->boot['root']);
     }
 }
