@@ -7,7 +7,7 @@ use ROrier\Container\Interfaces\ContainerInterface;
 use ROrier\Core\Foundations\AbstractApp;
 use ROrier\Core\Interfaces\KernelInterface;
 
-class App extends AbstractApp
+class LocalApp extends AbstractApp
 {
     public function __construct(string $root)
     {

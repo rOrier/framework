@@ -3,7 +3,7 @@
 namespace ROrier\Core\Components\Bootstrappers;
 
 use Exception;
-use ROrier\Core\Components\App;
+use ROrier\Core\Components\LocalApp;
 use ROrier\Core\Interfaces\AppInterface;
 use ROrier\Core\Foundations\AbstractBootstrapper;
 
@@ -24,6 +24,6 @@ class AppBootstrapper extends AbstractBootstrapper
 
     protected function buildApp(string $root): AppInterface
     {
-        return new App($root);
+        return new LocalApp($root);
     }
 }
