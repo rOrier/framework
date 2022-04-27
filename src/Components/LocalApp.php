@@ -9,38 +9,15 @@ use ROrier\Core\Interfaces\KernelInterface;
 
 class LocalApp extends AbstractApp
 {
-    public function __construct(string $root)
-    {
+    public function __construct(
+        string $root,
+        KernelInterface $kernel,
+        ParametersInterface $parameters,
+        ContainerInterface $container
+    ) {
         $this->root = $root;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setKernel(KernelInterface $kernel): self
-    {
         $this->kernel = $kernel;
-
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setParameters(ParametersInterface $parameters): self
-    {
         $this->parameters = $parameters;
-
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setContainer(ContainerInterface $container): self
-    {
         $this->container = $container;
-
-        return $this;
     }
 }

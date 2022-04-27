@@ -32,11 +32,7 @@ class AppBootstrapper extends AbstractBootstrapper
     {
         $this->saveKnownServices();
 
-        return $this->getApp()
-            ->setKernel($this->boot['kernel'])
-            ->setContainer($this->boot['container'])
-            ->setParameters($this->boot['parameters'])
-        ;
+        return $this->getApp();
     }
 
     /**
@@ -70,6 +66,11 @@ class AppBootstrapper extends AbstractBootstrapper
 
     protected function getApp(): AppInterface
     {
-        return new LocalApp($this->boot['root']);
+        return new LocalApp(
+            $this->boot['root'],
+            $this->getKernel(),
+            $this->getParameters(),
+            $this->getContainer()
+        );
     }
 }
