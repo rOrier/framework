@@ -10,7 +10,7 @@ use ROrier\Core\Interfaces\KernelInterface;
 use ROrier\Container\Exceptions\ContainerException;
 use ROrier\Container\Interfaces\ContainerInterface;
 
-class StubBootstrapper extends AbstractBootstrapper
+class AppBootstrapper extends AbstractBootstrapper
 {
     private array $knownServices = [
         'container',
@@ -28,7 +28,7 @@ class StubBootstrapper extends AbstractBootstrapper
      * @return AppInterface
      * @throws ContainerException
      */
-    public function finalyze(): AppInterface
+    public function buildApp(): AppInterface
     {
         $this->saveKnownServices();
 

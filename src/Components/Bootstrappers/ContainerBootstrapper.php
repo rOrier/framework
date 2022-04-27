@@ -30,7 +30,7 @@ class ContainerBootstrapper extends AbstractBootstrapper
 {
     private ContainerProxy $delayedContainer;
 
-    public function buildContainer(): StubBootstrapper
+    public function buildContainer(): AppBootstrapper
     {
         $container = new Container(
             $this->getLibrary(),
@@ -41,7 +41,7 @@ class ContainerBootstrapper extends AbstractBootstrapper
 
         $this->boot['container'] = $container;
 
-        return new StubBootstrapper($this->boot);
+        return new AppBootstrapper($this->boot);
     }
 
     protected function getServiceFactory(): ServiceFactoryInterface
