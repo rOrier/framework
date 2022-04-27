@@ -2,7 +2,9 @@
 
 namespace ROrier\Core\Components\Bootstrappers;
 
+use Exception;
 use ROrier\Config\Interfaces\ParametersInterface;
+use ROrier\Core\Components\GlobalApp;
 use ROrier\Core\Components\LocalApp;
 use ROrier\Core\Foundations\AbstractBootstrapper;
 use ROrier\Core\Interfaces\AppInterface;
@@ -28,11 +30,35 @@ class AppBootstrapper extends AbstractBootstrapper
      * @return AppInterface
      * @throws ContainerException
      */
-    public function buildApp(): AppInterface
+    public function buildLocalApp(): AppInterface
     {
         $this->saveKnownServices();
 
-        return $this->getApp();
+        return new LocalApp(
+            $this->boot['root'],
+            $this->getKernel(),
+            $this->getParameters(),
+            $this->getContainer()
+        );
+    }
+
+    /**
+     * @return AppInterface
+     * @throws ContainerException
+     * @throws Exception
+     */
+    public function buildGlobalApp(): AppInterface
+    {
+        $this->saveKnownServices();
+
+        GlobalApp::init(
+            $this->boot['root'],
+            $this->getKernel(),
+            $this->getParameters(),
+            $this->getContainer()
+        );
+
+        return GlobalApp::getInstance();
     }
 
     /**
@@ -62,15 +88,5 @@ class AppBootstrapper extends AbstractBootstrapper
     protected function getParameters(): ParametersInterface
     {
         return $this->boot['parameters'];
-    }
-
-    protected function getApp(): AppInterface
-    {
-        return new LocalApp(
-            $this->boot['root'],
-            $this->getKernel(),
-            $this->getParameters(),
-            $this->getContainer()
-        );
     }
 }
