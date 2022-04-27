@@ -49,7 +49,7 @@ class GlobalApp extends AbstractApp
      * @return AppInterface
      * @throws Exception
      */
-    static public function getInstance()
+    static public function get()
     {
         if (!isset(self::$instance)) {
             throw new Exception("App component never initialized");
