@@ -17,6 +17,17 @@ class KernelBootstrapper extends AbstractBootstrapper
         ConfigPackage::class
     ];
 
+    public function overrideRoot(string $root): self
+    {
+        if (!is_dir($root)) {
+            throw new Exception("Root folder not found : $root");
+        }
+
+        $this->boot['root'] = $root;
+
+        return $this;
+    }
+
     /**
      * @param string[] $userClassNames
      * @return ParametersBootstrapper
