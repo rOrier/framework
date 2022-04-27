@@ -3,8 +3,8 @@
 namespace ROrier\Core\Components\Bootstrappers;
 
 use ROrier\Config\Interfaces\ParametersInterface;
-use ROrier\Core\Components\App;
 use ROrier\Core\Foundations\AbstractBootstrapper;
+use ROrier\Core\Interfaces\AppInterface;
 use ROrier\Core\Interfaces\KernelInterface;
 use ROrier\Container\Exceptions\ContainerException;
 use ROrier\Container\Interfaces\ContainerInterface;
@@ -24,10 +24,10 @@ class StubBootstrapper extends AbstractBootstrapper
     ];
 
     /**
-     * @return App
+     * @return AppInterface
      * @throws ContainerException
      */
-    public function finalyze(): App
+    public function finalyze(): AppInterface
     {
         $this->saveKnownServices();
 
@@ -67,7 +67,7 @@ class StubBootstrapper extends AbstractBootstrapper
         return $this->boot['parameters'];
     }
 
-    protected function getApp(): App
+    protected function getApp(): AppInterface
     {
         return $this->boot['app'];
     }

@@ -5,9 +5,10 @@ namespace ROrier\Core\Components;
 use Exception;
 use ROrier\Config\Interfaces\ParametersInterface;
 use ROrier\Container\Interfaces\ContainerInterface;
+use ROrier\Core\Interfaces\AppInterface;
 use ROrier\Core\Interfaces\KernelInterface;
 
-class App
+class App implements AppInterface
 {
     private string $root;
 
@@ -23,8 +24,7 @@ class App
     }
 
     /**
-     * @param KernelInterface $kernel
-     * @return self
+     * @inheritDoc
      */
     public function setKernel(KernelInterface $kernel): self
     {
@@ -34,8 +34,7 @@ class App
     }
 
     /**
-     * @param ParametersInterface $parameters
-     * @return self
+     * @inheritDoc
      */
     public function setParameters(ParametersInterface $parameters): self
     {
@@ -45,8 +44,7 @@ class App
     }
 
     /**
-     * @param ContainerInterface $container
-     * @return self
+     * @inheritDoc
      */
     public function setContainer(ContainerInterface $container): self
     {
@@ -56,7 +54,7 @@ class App
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
     public function getRoot(): string
     {
@@ -64,8 +62,7 @@ class App
     }
 
     /**
-     * @return KernelInterface
-     * @throws Exception
+     * @inheritDoc
      */
     public function getKernel(): KernelInterface
     {
@@ -77,9 +74,7 @@ class App
     }
 
     /**
-     * @param string $address
-     * @return mixed
-     * @throws Exception
+     * @inheritDoc
      */
     public function getParameter(string $address)
     {
@@ -91,9 +86,7 @@ class App
     }
 
     /**
-     * @param string $id
-     * @return object
-     * @throws Exception
+     * @inheritDoc
      */
     public function getService(string $id): object
     {
