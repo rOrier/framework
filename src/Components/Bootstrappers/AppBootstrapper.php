@@ -9,8 +9,6 @@ use ROrier\Core\Foundations\AbstractBootstrapper;
 
 class AppBootstrapper extends AbstractBootstrapper
 {
-    private string $root;
-
     public function createApp(string $root): KernelBootstrapper
     {
         if (!is_dir($root)) {
