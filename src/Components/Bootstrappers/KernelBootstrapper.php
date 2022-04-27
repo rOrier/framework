@@ -7,7 +7,6 @@ use ROrier\Config\ConfigPackage;
 use ROrier\Core\Components\Kernel;
 use ROrier\Core\CorePackage;
 use ROrier\Core\Foundations\AbstractBootstrapper;
-use ROrier\Core\Interfaces\PackageInterface;
 use ROrier\Container\ContainerPackage;
 
 class KernelBootstrapper extends AbstractBootstrapper
@@ -17,6 +16,17 @@ class KernelBootstrapper extends AbstractBootstrapper
         ContainerPackage::class,
         ConfigPackage::class
     ];
+
+    public function overrideRoot(string $root): self
+    {
+        if (!is_dir($root)) {
+            throw new Exception("Root folder not found : $root");
+        }
+
+        $this->boot['root'] = $root;
+
+        return $this;
+    }
 
     /**
      * @param string[] $userClassNames
