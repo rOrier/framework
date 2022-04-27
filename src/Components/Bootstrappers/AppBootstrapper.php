@@ -60,7 +60,7 @@ class AppBootstrapper extends AbstractBootstrapper
             $this->getContainer()
         );
 
-        return $className::getInstance();
+        return $className::get();
     }
 
     /**
