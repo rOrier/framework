@@ -13,6 +13,13 @@ class GlobalApp extends AbstractApp
 {
     static private AppInterface $instance;
 
+    /**
+     * GlobalApp constructor.
+     * @param string $root
+     * @param KernelInterface $kernel
+     * @param ParametersInterface $parameters
+     * @param ContainerInterface $container
+     */
     private function __construct(
         string $root,
         KernelInterface $kernel,
