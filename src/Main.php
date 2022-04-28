@@ -3,11 +3,11 @@
 namespace ROrier\Core;
 
 use ROrier\Core\Components\Boot;
-use ROrier\Core\Components\Bootstrappers\KernelBootstrapper;
+use ROrier\Core\Components\Bootstrapper;
 
 abstract class Main
 {
-    static public function boot(): KernelBootstrapper
+    static public function boot(): Bootstrapper
     {
         $boot = new Boot();
 
@@ -18,7 +18,7 @@ abstract class Main
             $boot['root'] = dirname($trace['file']);
         }
 
-        return new KernelBootstrapper($boot);
+        return new Bootstrapper($boot);
     }
 
     /**
