@@ -28,8 +28,6 @@ use ROrier\Container\Services\ServiceBuilderModules\FactoryModule;
 
 class ContainerBootstrapper extends AbstractBootstrapper
 {
-    private ContainerProxy $delayedContainer;
-
     public function buildContainer(): AppBootstrapper
     {
         $container = new Container(

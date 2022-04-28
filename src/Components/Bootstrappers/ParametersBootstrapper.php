@@ -18,8 +18,6 @@ class ParametersBootstrapper extends AbstractBootstrapper
 {
     private array $additionalData = array();
 
-    private ParametersProxy $delayedParameters;
-
     /**
      * @param array $data
      * @return self

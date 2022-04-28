@@ -3,7 +3,6 @@
 namespace ROrier\Core;
 
 use ROrier\Core\Components\Boot;
-use ROrier\Core\Components\Bootstrappers\AppBootstrapper;
 use ROrier\Core\Components\Bootstrappers\KernelBootstrapper;
 
 abstract class Main

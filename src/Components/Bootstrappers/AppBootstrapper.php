@@ -2,7 +2,6 @@
 
 namespace ROrier\Core\Components\Bootstrappers;
 
-use Exception;
 use ROrier\Config\Interfaces\ParametersInterface;
 use ROrier\Core\Foundations\AbstractBootstrapper;
 use ROrier\Core\Interfaces\AppInterface;
