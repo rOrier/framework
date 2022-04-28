@@ -11,7 +11,7 @@ use ROrier\Core\Interfaces\KernelInterface;
 
 class GlobalApp extends AbstractApp
 {
-    static private AppInterface $instance;
+    static private ?AppInterface $instance = null;
 
     /**
      * GlobalApp constructor.
@@ -45,7 +45,7 @@ class GlobalApp extends AbstractApp
         ParametersInterface $parameters,
         ContainerInterface $container
     ) {
-        if (isset(self::$instance)) {
+        if (self::isset()) {
             throw new Exception("App component already initialized");
         }
 
@@ -58,10 +58,23 @@ class GlobalApp extends AbstractApp
      */
     static public function get(): AppInterface
     {
-        if (!isset(self::$instance)) {
+        if (!self::isset()) {
             throw new Exception("App component never initialized");
         }
 
         return self::$instance;
+    }
+
+    /**
+     * @return bool
+     */
+    static public function isset(): bool
+    {
+        return (self::$instance !== null);
+    }
+
+    static public function reset()
+    {
+        self::$instance = null;
     }
 }
