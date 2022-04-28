@@ -11,7 +11,7 @@ use ROrier\Core\Interfaces\KernelInterface;
 
 class GlobalApp extends AbstractApp
 {
-    static private AppInterface $instance;
+    static private ?AppInterface $instance = null;
 
     /**
      * GlobalApp constructor.
@@ -70,6 +70,11 @@ class GlobalApp extends AbstractApp
      */
     static public function isset(): bool
     {
-        return isset(self::$instance);
+        return (self::$instance !== null);
+    }
+
+    static public function reset()
+    {
+        self::$instance = null;
     }
 }
