@@ -37,7 +37,7 @@ class KernelBootstrapper extends AbstractBootstrapper
     {
         $kernel = new Kernel();
 
-        $classNames = array_merge($this->coreClassNames, $userClassNames);
+        $classNames = array_unique(array_merge($this->coreClassNames, $userClassNames));
 
         foreach ($classNames as $className) {
             $package = new $className();
