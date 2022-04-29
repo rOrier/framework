@@ -3,6 +3,7 @@
 namespace ROrier\Core\Components;
 
 use Exception;
+use ROrier\Config\Components\Bag;
 use ROrier\Core\Features\Bootstrappers\AppBootstrapperTrait;
 use ROrier\Core\Features\Bootstrappers\ContainerBootstrapperTrait;
 use ROrier\Core\Features\Bootstrappers\KernelBootstrapperTrait;
@@ -17,13 +18,44 @@ class Bootstrapper
         ContainerBootstrapperTrait,
         AppBootstrapperTrait;
 
+    protected const DEFAULT_BUILDERS_CONFIGURATION = [
+        'kernel' => 'buildKernel',
+        'parameters' => 'buildParameters',
+        'analyzer' => [
+            'config' => 'buildConfigAnalyzer',
+            'argument' => 'buildArgumentAnalyzer'
+        ],
+        'library' => [
+            'services' => 'buildLibrary'
+        ],
+        'container' => 'buildContainer',
+        'compilator' => [
+            'spec' => [
+                'services' => 'buildSpecCompilator'
+            ],
+        ],
+        'factory' => [
+            'services' => 'buildServiceFactory'
+        ],
+        'builder' => [
+            'service' => 'buildServiceBuilder',
+            'workbench' => [
+                'services' => 'buildServiceWorkbenchBuilder'
+            ]
+        ]
+    ];
+
+    protected const DEFAULT_CONFIGURATION = [
+        'builders' => self::DEFAULT_BUILDERS_CONFIGURATION
+    ];
+
     protected const APP_CLASS_NAME = 'ROrier\Core\Components\App';
 
     protected Boot $boot;
 
     protected array $services = [];
 
-    protected array $builders = [];
+    protected Bag $config;
 
     /**
      * Bootstrapper constructor.
@@ -34,43 +66,7 @@ class Bootstrapper
     {
         $this->boot = $boot;
 
-        $this->registerBuilders([
-            'kernel' => 'buildKernel',
-            'parameters' => 'buildParameters',
-            'analyzer.config' => 'buildConfigAnalyzer',
-            'library.services' => 'buildLibrary',
-            'container' => 'buildContainer',
-            'compilator.spec.services' => 'buildSpecCompilator',
-            'factory.services' => 'buildServiceFactory',
-            'builder.workbench.services' => 'buildServiceWorkbenchBuilder',
-            'builder.service' => 'buildServiceBuilder',
-            'analyzer.argument' => 'buildArgumentAnalyzer'
-        ]);
-    }
-
-    /**
-     * @param array $builders
-     * @throws Exception
-     */
-    protected function registerBuilders(array $builders): void
-    {
-        foreach($builders as $name => $method) {
-            $this->registerBuilder($name, $method);
-        }
-    }
-
-    /**
-     * @param string $name
-     * @param string $method
-     * @throws Exception
-     */
-    protected function registerBuilder(string $name, string $method): void
-    {
-        if (!method_exists($this, $method)) {
-            throw new Exception("Builder method not found : '$method'.");
-        }
-
-        $this->builders[$name] = $method;
+        $this->config = new Bag(self::DEFAULT_CONFIGURATION);
     }
 
     /**
@@ -103,10 +99,10 @@ class Bootstrapper
      */
     protected function callServiceBuilder(string $name): object
     {
-        if (!isset($this->builders[$name])) {
+        if (!isset($this->config["builders.$name"])) {
             throw new Exception("No builder found for requested service : '$name'.");
         }
 
-        return call_user_func([$this, $this->builders[$name]]);
+        return call_user_func([$this, $this->config["builders.$name"]]);
     }
 }
