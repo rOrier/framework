@@ -46,10 +46,9 @@ class Bootstrapper
     ];
 
     protected const DEFAULT_CONFIGURATION = [
+        'app_class_name' => 'ROrier\Core\Components\App',
         'builders' => self::DEFAULT_BUILDERS_CONFIGURATION
     ];
-
-    protected const APP_CLASS_NAME = 'ROrier\Core\Components\App';
 
     protected Boot $boot;
 

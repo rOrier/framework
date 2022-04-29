@@ -28,26 +28,26 @@ trait AppBootstrapperTrait
     }
 
     /**
-     * @param string|null $className
-     * @throws Exception
+     * @throws ContainerException
      */
-    public function finalize(?string $className = self::APP_CLASS_NAME): void
+    public function finalize(): void
     {
         $this->saveFixedServices();
 
-        $app = $this->buildApp($className);
+        $app = $this->buildApp();
 
         Main::save($app);
     }
 
     /**
-     * @param string $className
      * @return AppInterface
      * @throws Exception
      */
-    protected function buildApp(string $className): AppInterface
+    protected function buildApp(): AppInterface
     {
-        return new $className(
+        $appClassName = $this->config['app_class_name'];
+
+        return new $appClassName(
             $this->getRoot(),
             $this->getService('kernel'),
             $this->getService('parameters'),
