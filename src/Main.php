@@ -28,6 +28,15 @@ abstract class Main implements MainInterface
 
         $config = array_merge($config, $runtimeConfiguration);
 
+        return self::buildBootstrapper($config);
+    }
+
+    /**
+     * @inheritDoc
+     * @throws Exception
+     */
+    static protected function buildBootstrapper(array $config): Bootstrapper
+    {
         return new Bootstrapper($config);
     }
 
@@ -50,7 +59,7 @@ abstract class Main implements MainInterface
      * @inheritDoc
      * @throws Exception
      */
-    public static function app(): AppInterface
+    static public function app(): AppInterface
     {
         if (static::$app === null) {
             throw new Exception("App is undefined. Use boot() method to build application.");
