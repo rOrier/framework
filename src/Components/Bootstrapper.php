@@ -2,6 +2,7 @@
 
 namespace ROrier\Core\Components;
 
+use Exception;
 use ROrier\Core\Features\Bootstrappers\AppBootstrapperTrait;
 use ROrier\Core\Features\Bootstrappers\ContainerBootstrapperTrait;
 use ROrier\Core\Features\Bootstrappers\KernelBootstrapperTrait;
@@ -20,8 +21,63 @@ class Bootstrapper
 
     protected Boot $boot;
 
+    protected array $builders = [];
+
     public function __construct(Boot $boot)
     {
         $this->boot = $boot;
+    }
+
+    /**
+     * @param array $builders
+     * @throws Exception
+     */
+    protected function registerBuilders(array $builders): void
+    {
+        foreach($builders as $name => $method) {
+            $this->registerBuilder($name, $method);
+        }
+    }
+
+    /**
+     * @param string $name
+     * @param string $method
+     * @throws Exception
+     */
+    protected function registerBuilder(string $name, string $method): void
+    {
+        if (!method_exists($this, $method)) {
+            throw new Exception("Builder method not found : '$method'.");
+        }
+
+        $this->builders[$name] = $method;
+    }
+
+    /**
+     * @param string $name
+     * @return object
+     * @throws Exception
+     */
+    protected function getService(string $name): object
+    {
+        if (!isset($this->boot[$name])) {
+            $this->boot[$name] = $this->callServiceBuilder($name);
+        }
+
+        return $this->boot[$name];
+    }
+
+    /**
+     * @param string $name
+     * @return object
+     * @throws Exception
+     */
+    protected function callServiceBuilder(string $name): object
+    {
+        if (!isset($this->builders[$name])) {
+            throw new Exception("No builder found for requested service : '$name'.");
+        }
+
+        return call_user_func([$this, $this->builders[$name]]);
     }
 }
