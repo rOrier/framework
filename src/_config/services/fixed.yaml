@@ -1,3 +1,7 @@
+kernel:
+  fixed: true
+app:
+  fixed: true
 container:
   fixed: true
 parameters:
