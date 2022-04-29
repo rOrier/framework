@@ -11,6 +11,10 @@ abstract class Main
 {
     static private ?AppInterface $app = null;
 
+    /**
+     * @return Bootstrapper
+     * @throws Exception
+     */
     static public function boot(): Bootstrapper
     {
         $boot = new Boot();
