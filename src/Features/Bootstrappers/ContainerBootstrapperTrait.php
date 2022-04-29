@@ -32,7 +32,7 @@ trait ContainerBootstrapperTrait
     {
         $container = new Container(
             $this->getService('library.services'),
-            $this->getServiceFactory()
+            $this->getService('factory.services')
         );
 
         $this->getDelayedContainer()->setContainer($container);
@@ -40,61 +40,45 @@ trait ContainerBootstrapperTrait
         return $container;
     }
 
-    protected function getServiceFactory(): ServiceFactoryInterface
+    protected function buildServiceFactory(): ServiceFactoryInterface
     {
-        if (!isset($this->boot['factory.services'])) {
-            $this->boot['factory.services'] = new ServiceFactory(
-                $this->getDelayedContainer(),
-                $this->getService('library.services'),
-                $this->getServiceWorkbenchBuilder()
-            );
-        }
-
-        return $this->boot['factory.services'];
+        return new ServiceFactory(
+            $this->getDelayedContainer(),
+            $this->getService('library.services'),
+            $this->getService('builder.workbench.services')
+        );
     }
 
-    protected function getServiceWorkbenchBuilder(): ServiceWorkbenchBuilderInterface
+    protected function buildServiceWorkbenchBuilder(): ServiceWorkbenchBuilderInterface
     {
-        if (!isset($this->boot['builder.workbench.services'])) {
-            $this->boot['builder.workbench.services'] = new ServiceWorkbenchBuilder(
-                $this->getDelayedContainer(),
-                $this->getArgumentAnalyzer(),
-                $this->getServiceBuilder()
-            );
-        }
-
-        return $this->boot['builder.workbench.services'];
+        return new ServiceWorkbenchBuilder(
+            $this->getDelayedContainer(),
+            $this->getService('analyzer.argument'),
+            $this->getService('builder.service')
+        );
     }
 
-    protected function getServiceBuilder(): ServiceBuilderInterface
+    protected function buildServiceBuilder(): ServiceBuilderInterface
     {
-        if (!isset($this->boot['builder.service'])) {
-            $this->boot['builder.service'] = new ServiceBuilder([
-                new ConstructorModule($this->getArgumentAnalyzer()),
-                new FactoryModule($this->getDelayedContainer(), $this->getArgumentAnalyzer())
-            ],[
-                new ConfigModule($this->getService('analyzer.config')),
-                new CallsModule(),
-                new CatchModule($this->getService('library.services'))
-            ]);
-        }
-
-        return $this->boot['builder.service'];
+        return new ServiceBuilder([
+            new ConstructorModule($this->getService('analyzer.argument')),
+            new FactoryModule($this->getDelayedContainer(), $this->getService('analyzer.argument'))
+        ],[
+            new ConfigModule($this->getService('analyzer.config')),
+            new CallsModule(),
+            new CatchModule($this->getService('library.services'))
+        ]);
     }
 
-    protected function getArgumentAnalyzer(): Analyzer
+    protected function buildArgumentAnalyzer(): Analyzer
     {
-        if (!isset($this->boot['analyzer.argument'])) {
-            $this->boot['analyzer.argument'] = new Analyzer([
-                new ConstantParser(),
-                new EnvParser(),
-                new StringParameterParser($this->getService('parameters')),
-                new ArrayParameterParser($this->getService('parameters')),
-                new ServiceParser($this->getDelayedContainer())
-            ]);
-        }
-
-        return $this->boot['analyzer.argument'];
+        return new Analyzer([
+            new ConstantParser(),
+            new EnvParser(),
+            new StringParameterParser($this->getService('parameters')),
+            new ArrayParameterParser($this->getService('parameters')),
+            new ServiceParser($this->getDelayedContainer())
+        ]);
     }
 
     /**

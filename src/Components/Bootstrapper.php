@@ -37,7 +37,12 @@ class Bootstrapper
             'parameters' => 'buildParameters',
             'analyzer.config' => 'buildConfigAnalyzer',
             'library.services' => 'buildLibrary',
-            'container' => 'buildContainer'
+            'container' => 'buildContainer',
+            'compilator.spec.services' => 'buildSpecCompilator',
+            'factory.services' => 'buildServiceFactory',
+            'builder.workbench.services' => 'buildServiceWorkbenchBuilder',
+            'builder.service' => 'buildServiceBuilder',
+            'analyzer.argument' => 'buildArgumentAnalyzer'
         ]);
     }
 

@@ -39,7 +39,7 @@ trait LibraryBootstrapperTrait
     {
         return new ServiceLibrary(
             $this->buildServicesData(),
-            $this->buildSpecCompilator()
+            $this->getService('compilator.spec.services')
         );
     }
 
@@ -67,7 +67,7 @@ trait LibraryBootstrapperTrait
      */
     protected function buildSpecCompilator()
     {
-        return $this->boot['compilator.spec.services'] = new Compilator([
+        return new Compilator([
             new InheritanceCompiler(),
             new FactoryCompiler()
         ]);
