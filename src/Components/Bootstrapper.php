@@ -57,6 +57,8 @@ class Bootstrapper
 
     protected Bag $config;
 
+    protected array $requestedServiceBuilding = [];
+
     /**
      * Bootstrapper constructor.
      * @param array $config
@@ -108,7 +110,11 @@ class Bootstrapper
     {
         if (!isset($this->config["builders.$name"])) {
             throw new Exception("No builder found for requested service : '$name'.");
+        } elseif (in_array($name, $this->requestedServiceBuilding)) {
+            throw new Exception("Circular reference detected !! Service building already requested : '$name'.");
         }
+
+        $this->requestedServiceBuilding[] = $name;
 
         return call_user_func([$this, $this->config["builders.$name"]]);
     }
