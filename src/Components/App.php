@@ -1,6 +1,6 @@
 <?php
 
-namespace ROrier\Core\Foundations;
+namespace ROrier\Core\Components;
 
 use Exception;
 use ROrier\Config\Interfaces\ParametersInterface;
@@ -8,7 +8,7 @@ use ROrier\Container\Interfaces\ContainerInterface;
 use ROrier\Core\Interfaces\AppInterface;
 use ROrier\Core\Interfaces\KernelInterface;
 
-abstract class AbstractApp implements AppInterface
+class App implements AppInterface
 {
     protected string $root;
 
@@ -17,6 +17,18 @@ abstract class AbstractApp implements AppInterface
     protected ParametersInterface $parameters;
 
     protected ContainerInterface $container;
+
+    public function __construct(
+        string $root,
+        KernelInterface $kernel,
+        ParametersInterface $parameters,
+        ContainerInterface $container
+    ) {
+        $this->root = $root;
+        $this->kernel = $kernel;
+        $this->parameters = $parameters;
+        $this->container = $container;
+    }
 
     /**
      * @inheritDoc
