@@ -3,7 +3,6 @@
 namespace ROrier\Core\Components;
 
 use Exception;
-use ROrier\Config\Components\Bag;
 use ROrier\Core\Features\Bootstrappers\AppBootstrapperTrait;
 use ROrier\Core\Features\Bootstrappers\ContainerBootstrapperTrait;
 use ROrier\Core\Features\Bootstrappers\KernelBootstrapperTrait;
@@ -22,28 +21,14 @@ class Bootstrapper
         'app' => 'buildApp',
         'kernel' => 'buildKernel',
         'parameters' => 'buildParameters',
-        'analyzer' => [
-            'config' => 'buildConfigAnalyzer',
-            'argument' => 'buildArgumentAnalyzer'
-        ],
-        'library' => [
-            'services' => 'buildLibrary'
-        ],
+        'analyzer.config' => 'buildConfigAnalyzer',
+        'analyzer.argument' => 'buildArgumentAnalyzer',
+        'library.services' => 'buildLibrary',
         'container' => 'buildContainer',
-        'compilator' => [
-            'spec' => [
-                'services' => 'buildSpecCompilator'
-            ],
-        ],
-        'factory' => [
-            'services' => 'buildServiceFactory'
-        ],
-        'builder' => [
-            'service' => 'buildServiceBuilder',
-            'workbench' => [
-                'services' => 'buildServiceWorkbenchBuilder'
-            ]
-        ]
+        'compilator.spec.services' => 'buildSpecCompilator',
+        'factory.services' => 'buildServiceFactory',
+        'builder.service' => 'buildServiceBuilder',
+        'builder.workbench.services' => 'buildServiceWorkbenchBuilder'
     ];
 
     protected const DEFAULT_CONFIGURATION = [
@@ -55,7 +40,7 @@ class Bootstrapper
 
     protected array $services = [];
 
-    protected Bag $config;
+    protected array $config;
 
     protected array $requestedServiceBuilding = [];
 
@@ -65,9 +50,7 @@ class Bootstrapper
      */
     public function __construct(array $config = [])
     {
-        $this->config = new Bag(self::DEFAULT_CONFIGURATION);
-
-        $this->config($config);
+        $this->config = array_merge(self::DEFAULT_CONFIGURATION, $config);
     }
 
     /**
@@ -75,7 +58,7 @@ class Bootstrapper
      */
     protected function config(array $data): void
     {
-        $this->config->merge($data);
+        $this->config = array_merge($this->config, $data);
     }
 
     /**
@@ -108,7 +91,9 @@ class Bootstrapper
      */
     protected function callServiceBuilder(string $name): object
     {
-        if (!isset($this->config["builders.$name"])) {
+        $builders = $this->config['builders'];
+
+        if (!isset($builders[$name])) {
             throw new Exception("No builder found for requested service : '$name'.");
         } elseif (in_array($name, $this->requestedServiceBuilding)) {
             throw new Exception("Circular reference detected !! Service building already requested : '$name'.");
@@ -116,6 +101,6 @@ class Bootstrapper
 
         $this->requestedServiceBuilding[] = $name;
 
-        return call_user_func([$this, $this->config["builders.$name"]]);
+        return call_user_func([$this, $builders[$name]]);
     }
 }
