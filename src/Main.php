@@ -50,7 +50,7 @@ abstract class Main implements MainInterface
      * @inheritDoc
      * @throws Exception
      */
-    public static function app(): AppInterface
+    static public function app(): AppInterface
     {
         if (static::$app === null) {
             throw new Exception("App is undefined. Use boot() method to build application.");
