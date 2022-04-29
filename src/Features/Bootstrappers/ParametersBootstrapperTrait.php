@@ -4,7 +4,6 @@ namespace ROrier\Core\Features\Bootstrappers;
 
 use Exception;
 use ROrier\Config\Components\Bag;
-use ROrier\Config\Interfaces\AnalyzerInterface;
 use ROrier\Config\Interfaces\ParametersInterface;
 use ROrier\Config\Services\Analyzer;
 use ROrier\Config\Services\ConfigParsers\ArrayParameterParser;
@@ -13,6 +12,7 @@ use ROrier\Config\Services\ConfigParsers\EnvParser;
 use ROrier\Config\Services\ConfigParsers\StringParameterParser;
 use ROrier\Config\Services\DelayedProxies\ParametersProxy;
 use ROrier\Config\Services\Parameters;
+use ROrier\Core\Interfaces\KernelInterface;
 use ROrier\Core\Interfaces\PackageInterface;
 
 trait ParametersBootstrapperTrait
@@ -43,7 +43,7 @@ trait ParametersBootstrapperTrait
     {
         $parameters = new Parameters(
             $this->buildParametersData(),
-            $this->getConfigAnalyzer()
+            $this->getService('analyzer.config')
         );
 
         $this->getDelayedParameters()->setParameters($parameters);
@@ -58,8 +58,11 @@ trait ParametersBootstrapperTrait
     {
         $data = new Bag();
 
+        /** @var KernelInterface $kernel */
+        $kernel = $this->getService('kernel');
+
         /** @var PackageInterface $package */
-        foreach ($this->getKernel()->getPackages() as $package) {
+        foreach ($kernel->getPackages() as $package) {
             $data->merge($package->buildParameters());
         }
 
@@ -95,23 +98,5 @@ trait ParametersBootstrapperTrait
         }
 
         return $delayedParameters;
-    }
-
-    /**
-     * @return ParametersInterface
-     * @throws Exception
-     */
-    protected function getParameters(): ParametersInterface
-    {
-        return $this->getService('parameters');
-    }
-
-    /**
-     * @return AnalyzerInterface
-     * @throws Exception
-     */
-    protected function getConfigAnalyzer(): AnalyzerInterface
-    {
-        return $this->getService('analyzer.config');
     }
 }

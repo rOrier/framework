@@ -5,6 +5,7 @@ namespace ROrier\Core\Features\Bootstrappers;
 use Exception;
 use ROrier\Config\Tools\CollectionTool;
 use ROrier\Container\Interfaces\ServiceLibraryInterface;
+use ROrier\Core\Interfaces\KernelInterface;
 use ROrier\Core\Interfaces\PackageInterface;
 use ROrier\Container\Services\Compilator;
 use ROrier\Container\Services\Libraries\ServiceLibrary;
@@ -46,8 +47,11 @@ trait LibraryBootstrapperTrait
     {
         $data = [];
 
+        /** @var KernelInterface $kernel */
+        $kernel = $this->getService('kernel');
+
         /** @var PackageInterface $package */
-        foreach ($this->getKernel()->getPackages() as $package) {
+        foreach ($kernel->getPackages() as $package) {
             CollectionTool::merge($data, $package->buildServices());
         }
 
@@ -67,14 +71,5 @@ trait LibraryBootstrapperTrait
             new InheritanceCompiler(),
             new FactoryCompiler()
         ]);
-    }
-
-    /**
-     * @return ServiceLibraryInterface
-     * @throws Exception
-     */
-    protected function getLibrary(): ServiceLibraryInterface
-    {
-        return $this->getService('library.services');
     }
 }

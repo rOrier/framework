@@ -2,7 +2,6 @@
 
 namespace ROrier\Core\Features\Bootstrappers;
 
-use Exception;
 use ROrier\Config\Services\Analyzer;
 use ROrier\Config\Services\ConfigParsers\ArrayParameterParser;
 use ROrier\Config\Services\ConfigParsers\ConstantParser;
@@ -32,7 +31,7 @@ trait ContainerBootstrapperTrait
     protected function buildContainer(): ContainerInterface
     {
         $container = new Container(
-            $this->getLibrary(),
+            $this->getService('library.services'),
             $this->getServiceFactory()
         );
 
@@ -46,7 +45,7 @@ trait ContainerBootstrapperTrait
         if (!isset($this->boot['factory.services'])) {
             $this->boot['factory.services'] = new ServiceFactory(
                 $this->getDelayedContainer(),
-                $this->getLibrary(),
+                $this->getService('library.services'),
                 $this->getServiceWorkbenchBuilder()
             );
         }
@@ -74,9 +73,9 @@ trait ContainerBootstrapperTrait
                 new ConstructorModule($this->getArgumentAnalyzer()),
                 new FactoryModule($this->getDelayedContainer(), $this->getArgumentAnalyzer())
             ],[
-                new ConfigModule($this->getConfigAnalyzer()),
+                new ConfigModule($this->getService('analyzer.config')),
                 new CallsModule(),
-                new CatchModule($this->getLibrary())
+                new CatchModule($this->getService('library.services'))
             ]);
         }
 
@@ -89,8 +88,8 @@ trait ContainerBootstrapperTrait
             $this->boot['analyzer.argument'] = new Analyzer([
                 new ConstantParser(),
                 new EnvParser(),
-                new StringParameterParser($this->getParameters()),
-                new ArrayParameterParser($this->getParameters()),
+                new StringParameterParser($this->getService('parameters')),
+                new ArrayParameterParser($this->getService('parameters')),
                 new ServiceParser($this->getDelayedContainer())
             ]);
         }
@@ -110,14 +109,5 @@ trait ContainerBootstrapperTrait
         }
 
         return $delayedContainer;
-    }
-
-    /**
-     * @return ContainerInterface
-     * @throws Exception
-     */
-    protected function getContainer(): ContainerInterface
-    {
-        return $this->getService('container');
     }
 }

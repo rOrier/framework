@@ -3,6 +3,8 @@
 namespace ROrier\Core\Features\Bootstrappers;
 
 use Exception;
+use ROrier\Container\Exceptions\ContainerException;
+use ROrier\Container\Interfaces\ContainerInterface;
 use ROrier\Core\Interfaces\AppInterface;
 use ROrier\Core\Main;
 
@@ -58,15 +60,19 @@ trait AppBootstrapperTrait
     {
         return new $className(
             $this->getRoot(),
-            $this->getKernel(),
-            $this->getParameters(),
-            $this->getContainer()
+            $this->getService('kernel'),
+            $this->getService('parameters'),
+            $this->getService('container')
         );
     }
 
+    /**
+     * @throws ContainerException
+     */
     protected function saveKnownServices(): void
     {
-        $container = $this->getContainer();
+        /** @var ContainerInterface $container */
+        $container = $this->getService('container');
 
         foreach ($this->knownServices as $knownService) {
             if (isset($this->boot[$knownService])) {

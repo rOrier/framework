@@ -50,13 +50,4 @@ trait KernelBootstrapperTrait
 
         return $kernel;
     }
-
-    /**
-     * @return KernelInterface
-     * @throws Exception
-     */
-    protected function getKernel(): KernelInterface
-    {
-        return $this->getService('kernel');
-    }
 }
