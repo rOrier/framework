@@ -28,6 +28,15 @@ abstract class Main implements MainInterface
 
         $config = array_merge($config, $runtimeConfiguration);
 
+        return self::buildBootstrapper($config);
+    }
+
+    /**
+     * @inheritDoc
+     * @throws Exception
+     */
+    static protected function buildBootstrapper(array $config): Bootstrapper
+    {
         return new Bootstrapper($config);
     }
 
