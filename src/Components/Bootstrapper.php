@@ -3,6 +3,9 @@
 namespace ROrier\Core\Components;
 
 use Exception;
+use ROrier\Config\ConfigPackage;
+use ROrier\Container\ContainerPackage;
+use ROrier\Core\CorePackage;
 use ROrier\Core\Features\Bootstrappers\AppBootstrapperTrait;
 use ROrier\Core\Features\Bootstrappers\ContainerBootstrapperTrait;
 use ROrier\Core\Features\Bootstrappers\KernelBootstrapperTrait;
@@ -31,10 +34,17 @@ class Bootstrapper
         'builder.workbench.services' => 'buildServiceWorkbenchBuilder'
     ];
 
+    protected const DEFAULT_PACKAGES = [
+        CorePackage::class,
+        ContainerPackage::class,
+        ConfigPackage::class
+    ];
+
     protected const DEFAULT_CONFIGURATION = [
         'root' => null,
         'main_class_name' => 'ROrier\Core\Main',
         'app_class_name' => 'ROrier\Core\Components\App',
+        'packages' => self::DEFAULT_PACKAGES,
         'builders' => self::DEFAULT_BUILDERS_CONFIGURATION
     ];
 
