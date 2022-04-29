@@ -21,4 +21,9 @@ interface MainInterface
      * @param AppInterface $app
      */
     static public function save(AppInterface $app): void;
+
+    /**
+     * @return bool
+     */
+    static public function ready(): bool;
 }

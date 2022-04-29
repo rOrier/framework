@@ -12,24 +12,6 @@ use ROrier\Core\Main;
 trait AppBootstrapperTrait
 {
     /**
-     * @param string $root
-     * @return self
-     * @throws Exception
-     */
-    public function overrideRoot(string $root): self
-    {
-        if (!is_dir($root)) {
-            throw new Exception("Root folder not found : $root");
-        }
-
-        $this->config([
-            'root' => $root
-        ]);
-
-        return $this;
-    }
-
-    /**
      * @throws ContainerException
      * @throws Exception
      */
@@ -96,7 +78,7 @@ trait AppBootstrapperTrait
     protected function getRoot(): string
     {
         if (!isset($this->config['root'])) {
-            throw new Exception("Application root could not be automatically inferred. Use overrideRoot() to define required 'root' parameter.");
+            throw new Exception("Application root could not be automatically inferred. Use manual configuration to define required 'root' parameter.");
         }
 
         return $this->config['root'];
