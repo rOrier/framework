@@ -66,4 +66,12 @@ abstract class Main implements MainInterface
     {
         static::$app = $app;
     }
+
+    /**
+     * @inheritDoc
+     */
+    static public function ready(): bool
+    {
+        return (static::$app !== null);
+    }
 }
