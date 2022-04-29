@@ -32,9 +32,9 @@ trait AppBootstrapperTrait
      */
     public function finalize(): void
     {
-        $this->saveFixedServices();
+        $app = $this->getService('app');
 
-        $app = $this->buildApp();
+        $this->saveFixedServices();
 
         Main::save($app);
     }

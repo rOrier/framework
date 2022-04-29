@@ -19,6 +19,7 @@ class Bootstrapper
         AppBootstrapperTrait;
 
     protected const DEFAULT_BUILDERS_CONFIGURATION = [
+        'app' => 'buildApp',
         'kernel' => 'buildKernel',
         'parameters' => 'buildParameters',
         'analyzer' => [
