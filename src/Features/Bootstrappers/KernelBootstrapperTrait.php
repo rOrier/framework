@@ -41,7 +41,10 @@ trait KernelBootstrapperTrait
     {
         $kernel = new Kernel();
 
-        $classNames = array_unique(array_merge($this->corePackages, $this->additionalPackages));
+        $classNames = array_unique(array_merge(
+            $this->config['packages'],
+            $this->additionalPackages
+        ));
 
         foreach ($classNames as $className) {
             $package = new $className();
