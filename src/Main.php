@@ -10,6 +10,8 @@ use ROrier\Core\Interfaces\MainInterface;
 
 abstract class Main implements MainInterface
 {
+    protected const DEFAULT_CONFIGURATION = [];
+
     static private ?AppInterface $app = null;
 
     /**
@@ -18,7 +20,7 @@ abstract class Main implements MainInterface
      */
     static public function boot(array $runtimeConfiguration = []): Bootstrapper
     {
-        $config = [];
+        $config = static::DEFAULT_CONFIGURATION;
 
         self::inferConfiguration(
             $config,
