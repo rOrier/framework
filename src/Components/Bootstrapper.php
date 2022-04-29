@@ -78,11 +78,20 @@ class Bootstrapper
      */
     protected function getService(string $name): object
     {
-        if (!isset($this->boot[$name])) {
+        if (!$this->hasService($name)) {
             $this->boot[$name] = $this->callServiceBuilder($name);
         }
 
         return $this->boot[$name];
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    protected function hasService(string $name): bool
+    {
+        return isset($this->boot[$name]);
     }
 
     /**

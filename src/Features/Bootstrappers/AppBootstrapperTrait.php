@@ -5,23 +5,12 @@ namespace ROrier\Core\Features\Bootstrappers;
 use Exception;
 use ROrier\Container\Exceptions\ContainerException;
 use ROrier\Container\Interfaces\ContainerInterface;
+use ROrier\Container\Interfaces\ServiceLibraryInterface;
 use ROrier\Core\Interfaces\AppInterface;
 use ROrier\Core\Main;
 
 trait AppBootstrapperTrait
 {
-    protected array $knownServices = [
-        'container',
-        'parameters',
-        'library.services',
-        'factory.services',
-        'builder.workbench.services',
-        'builder.service',
-        'analyzer.config',
-        'analyzer.argument',
-        'compilator.spec.services'
-    ];
-
     /**
      * @param string $root
      * @return self
@@ -44,7 +33,7 @@ trait AppBootstrapperTrait
      */
     public function finalize(?string $className = self::APP_CLASS_NAME): void
     {
-        $this->saveKnownServices();
+        $this->saveFixedServices();
 
         $app = $this->buildApp($className);
 
@@ -69,14 +58,17 @@ trait AppBootstrapperTrait
     /**
      * @throws ContainerException
      */
-    protected function saveKnownServices(): void
+    protected function saveFixedServices(): void
     {
         /** @var ContainerInterface $container */
         $container = $this->getService('container');
 
-        foreach ($this->knownServices as $knownService) {
-            if (isset($this->boot[$knownService])) {
-                $container->setService($knownService, $this->boot[$knownService]);
+        /** @var ServiceLibraryInterface $library */
+        $library = $this->getService('library.services');
+
+        foreach ($library->getFixedServices() as $fixedService) {
+            if ($this->hasService($fixedService)) {
+                $container->setService($fixedService, $this->getService($fixedService));
             }
         }
     }
