@@ -3,20 +3,11 @@
 namespace ROrier\Core\Features\Bootstrappers;
 
 use Exception;
-use ROrier\Config\ConfigPackage;
 use ROrier\Core\Components\Kernel;
-use ROrier\Core\CorePackage;
-use ROrier\Container\ContainerPackage;
 use ROrier\Core\Interfaces\KernelInterface;
 
 trait KernelBootstrapperTrait
 {
-    private array $corePackages = [
-        CorePackage::class,
-        ContainerPackage::class,
-        ConfigPackage::class
-    ];
-
     private array $additionalPackages = [];
 
     /**
