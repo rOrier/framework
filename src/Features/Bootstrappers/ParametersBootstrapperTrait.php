@@ -41,14 +41,16 @@ trait ParametersBootstrapperTrait
      */
     protected function buildParameters(): ParametersInterface
     {
-        $this->boot['parameters'] = new Parameters(
+        $parameters = new Parameters(
             $this->buildParametersData(),
             $this->getConfigAnalyzer()
         );
 
-        $this->getDelayedParameters()->setParameters($this->boot['parameters']);
+        $this->getDelayedParameters()->setParameters($parameters);
 
-        return $this->boot['parameters'];
+        $this->boot['parameters'] = $parameters;
+
+        return $parameters;
     }
 
     /**

@@ -36,12 +36,14 @@ trait LibraryBootstrapperTrait
      */
     protected function buildLibrary(): ServiceLibraryInterface
     {
-        $this->boot['library.services'] = new ServiceLibrary(
+        $librairy = new ServiceLibrary(
             $this->buildServicesData(),
             $this->buildSpecCompilator()
         );
 
-        return $this->boot['library.services'];
+        $this->boot['library.services'] = $librairy;
+
+        return $librairy;
     }
 
     protected function buildServicesData()
