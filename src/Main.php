@@ -3,7 +3,6 @@
 namespace ROrier\Core;
 
 use Exception;
-use ROrier\Core\Components\Boot;
 use ROrier\Core\Components\Bootstrapper;
 use ROrier\Core\Interfaces\AppInterface;
 
@@ -17,16 +16,16 @@ abstract class Main
      */
     static public function boot(): Bootstrapper
     {
-        $boot = new Boot();
+        $config = [];
 
         $stack = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
         $trace = array_pop($stack);
 
         if (self::isValidTrace($trace)) {
-            $boot['root'] = dirname($trace['file']);
+            $config['root'] = dirname($trace['file']);
         }
 
-        return new Bootstrapper($boot);
+        return new Bootstrapper($config);
     }
 
     /**

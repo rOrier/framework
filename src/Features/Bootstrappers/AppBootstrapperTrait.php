@@ -22,7 +22,9 @@ trait AppBootstrapperTrait
             throw new Exception("Root folder not found : $root");
         }
 
-        $this->boot['root'] = $root;
+        $this->config([
+            'root' => $root
+        ]);
 
         return $this;
     }
@@ -79,10 +81,10 @@ trait AppBootstrapperTrait
      */
     protected function getRoot(): string
     {
-        if (!isset($this->boot['root'])) {
-            throw new Exception("Application root could not be automatically inferred. Use overrideRoot() to set it.");
+        if (!isset($this->config['root'])) {
+            throw new Exception("Application root could not be automatically inferred. Use overrideRoot() to define required 'root' parameter.");
         }
 
-        return $this->boot['root'];
+        return $this->config['root'];
     }
 }

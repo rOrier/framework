@@ -47,11 +47,10 @@ class Bootstrapper
     ];
 
     protected const DEFAULT_CONFIGURATION = [
+        'root' => null,
         'app_class_name' => 'ROrier\Core\Components\App',
         'builders' => self::DEFAULT_BUILDERS_CONFIGURATION
     ];
-
-    protected Boot $boot;
 
     protected array $services = [];
 
@@ -59,14 +58,21 @@ class Bootstrapper
 
     /**
      * Bootstrapper constructor.
-     * @param Boot $boot
-     * @throws Exception
+     * @param array $config
      */
-    public function __construct(Boot $boot)
+    public function __construct(array $config = [])
     {
-        $this->boot = $boot;
-
         $this->config = new Bag(self::DEFAULT_CONFIGURATION);
+
+        $this->config($config);
+    }
+
+    /**
+     * @param array $data
+     */
+    protected function config(array $data): void
+    {
+        $this->config->merge($data);
     }
 
     /**
