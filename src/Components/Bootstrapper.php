@@ -11,6 +11,7 @@ use ROrier\Core\Features\Bootstrappers\ContainerBootstrapperTrait;
 use ROrier\Core\Features\Bootstrappers\KernelBootstrapperTrait;
 use ROrier\Core\Features\Bootstrappers\LibraryBootstrapperTrait;
 use ROrier\Core\Features\Bootstrappers\ParametersBootstrapperTrait;
+use ROrier\Core\Main;
 
 class Bootstrapper
 {
@@ -42,15 +43,15 @@ class Bootstrapper
 
     protected const DEFAULT_CONFIGURATION = [
         'root' => null,
-        'main_class_name' => 'ROrier\Core\Main',
-        'app_class_name' => 'ROrier\Core\Components\App',
+        'main_class_name' => Main::class,
+        'app_class_name' => App::class,
         'packages' => self::DEFAULT_PACKAGES,
         'builders' => self::DEFAULT_BUILDERS_CONFIGURATION
     ];
 
     protected array $services = [];
 
-    protected array $config;
+    protected array $config = [];
 
     protected array $requestedServiceBuilding = [];
 
