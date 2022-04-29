@@ -26,7 +26,7 @@ trait ParametersBootstrapperTrait
      */
     public function addParametersData(array $data): self
     {
-        if (isset($this->boot['parameters'])) {
+        if ($this->hasService('parameters')) {
             throw new Exception("Parameters already built. Add parameters data before using buildParameters().");
         }
 

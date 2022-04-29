@@ -23,7 +23,7 @@ trait LibraryBootstrapperTrait
      */
     public function addServicesData(array $data): self
     {
-        if (isset($this->boot['library.services'])) {
+        if ($this->hasService('library.services')) {
             throw new Exception("Library already built. Add services data before using buildParameters().");
         }
 
