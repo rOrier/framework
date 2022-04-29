@@ -16,8 +16,7 @@ class Bootstrapper
         ContainerBootstrapperTrait,
         AppBootstrapperTrait;
 
-    protected const DEFAULT_LOCAL_APP = 'ROrier\Core\Components\LocalApp';
-    protected const DEFAULT_GLOBAL_APP = 'ROrier\Core\Components\GlobalApp';
+    protected const APP_CLASS_NAME = 'ROrier\Core\Components\App';
 
     protected Boot $boot;
 

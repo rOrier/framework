@@ -40,7 +40,7 @@ trait AppBootstrapperTrait
      * @return AppInterface
      * @throws Exception
      */
-    public function buildLocalApp(?string $className = self::DEFAULT_LOCAL_APP): AppInterface
+    public function buildApp(?string $className = self::APP_CLASS_NAME): AppInterface
     {
         $this->saveKnownServices();
 
@@ -50,25 +50,6 @@ trait AppBootstrapperTrait
             $this->getParameters(),
             $this->getContainer()
         );
-    }
-
-    /**
-     * @param string|null $className
-     * @return AppInterface
-     * @throws Exception
-     */
-    public function buildGlobalApp(?string $className = self::DEFAULT_GLOBAL_APP): AppInterface
-    {
-        $this->saveKnownServices();
-
-        $className::init(
-            $this->getRoot(),
-            $this->getKernel(),
-            $this->getParameters(),
-            $this->getContainer()
-        );
-
-        return $className::get();
     }
 
     protected function saveKnownServices(): void
