@@ -21,6 +21,8 @@ class Bootstrapper
 
     protected Boot $boot;
 
+    protected array $services = [];
+
     protected array $builders = [];
 
     /**
@@ -79,10 +81,10 @@ class Bootstrapper
     protected function getService(string $name): object
     {
         if (!$this->hasService($name)) {
-            $this->boot[$name] = $this->callServiceBuilder($name);
+            $this->services[$name] = $this->callServiceBuilder($name);
         }
 
-        return $this->boot[$name];
+        return $this->services[$name];
     }
 
     /**
@@ -91,7 +93,7 @@ class Bootstrapper
      */
     protected function hasService(string $name): bool
     {
-        return isset($this->boot[$name]);
+        return isset($this->services[$name]);
     }
 
     /**
