@@ -21,14 +21,14 @@ abstract class Main implements MainInterface
     {
         $config = static::DEFAULT_CONFIGURATION;
 
-        self::inferConfiguration(
+        static::inferConfiguration(
             $config,
             debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1)
         );
 
         $config = array_merge($config, $runtimeConfiguration);
 
-        return self::buildBootstrapper($config);
+        return static::buildBootstrapper($config);
     }
 
     /**
