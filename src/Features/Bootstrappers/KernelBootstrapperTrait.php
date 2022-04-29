@@ -34,10 +34,10 @@ trait KernelBootstrapperTrait
     }
 
     /**
-     * @return self
+     * @return KernelInterface
      * @throws Exception
      */
-    public function buildKernel(): self
+    protected function buildKernel(): KernelInterface
     {
         $kernel = new Kernel();
 
@@ -50,7 +50,7 @@ trait KernelBootstrapperTrait
 
         $this->boot['kernel'] = $kernel;
 
-        return $this;
+        return $kernel;
     }
 
     /**
@@ -59,10 +59,12 @@ trait KernelBootstrapperTrait
      */
     protected function getKernel(): KernelInterface
     {
-        if (!isset($this->boot['kernel'])) {
-            throw new Exception("Kernel not found. Use buildKernel() to make it available.");
+        static $kernel = null;
+
+        if ($kernel === null) {
+            $kernel = $this->buildKernel();
         }
 
-        return $this->boot['kernel'];
+        return $kernel;
     }
 }

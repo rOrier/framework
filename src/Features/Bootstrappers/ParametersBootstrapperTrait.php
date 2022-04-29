@@ -36,18 +36,19 @@ trait ParametersBootstrapperTrait
     }
 
     /**
-     * @return self
+     * @return ParametersInterface
+     * @throws Exception
      */
-    public function buildParameters(): self
+    protected function buildParameters(): ParametersInterface
     {
         $this->boot['parameters'] = new Parameters(
             $this->buildParametersData(),
-            $this->buildConfigAnalyzer()
+            $this->getConfigAnalyzer()
         );
 
         $this->getDelayedParameters()->setParameters($this->boot['parameters']);
 
-        return $this;
+        return $this->boot['parameters'];
     }
 
     /**
@@ -102,11 +103,13 @@ trait ParametersBootstrapperTrait
      */
     protected function getParameters(): ParametersInterface
     {
-        if (!isset($this->boot['parameters'])) {
-            throw new Exception("Parameters not found. Use buildParameters() to make it available.");
+        static $parameters = null;
+
+        if ($parameters === null) {
+            $parameters = $this->buildParameters();
         }
 
-        return $this->boot['parameters'];
+        return $parameters;
     }
 
     /**
@@ -115,10 +118,12 @@ trait ParametersBootstrapperTrait
      */
     protected function getConfigAnalyzer(): AnalyzerInterface
     {
-        if (!isset($this->boot['analyzer.config'])) {
-            throw new Exception("Config analyzer not found. Use buildParameters() to make it available.");
+        static $configAnalyzer = null;
+
+        if ($configAnalyzer === null) {
+            $configAnalyzer = $this->buildConfigAnalyzer();
         }
 
-        return $this->boot['analyzer.config'];
+        return $configAnalyzer;
     }
 }

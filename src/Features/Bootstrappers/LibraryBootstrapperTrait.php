@@ -31,14 +31,17 @@ trait LibraryBootstrapperTrait
         return $this;
     }
 
-    public function buildLibrary(): self
+    /**
+     * @return ServiceLibraryInterface
+     */
+    protected function buildLibrary(): ServiceLibraryInterface
     {
         $this->boot['library.services'] = new ServiceLibrary(
             $this->buildServicesData(),
             $this->buildSpecCompilator()
         );
 
-        return $this;
+        return $this->boot['library.services'];
     }
 
     protected function buildServicesData()
@@ -74,10 +77,12 @@ trait LibraryBootstrapperTrait
      */
     protected function getLibrary(): ServiceLibraryInterface
     {
-        if (!isset($this->boot['library.services'])) {
-            throw new Exception("Library not found. Use buildLibrary() to make it available.");
+        static $library = null;
+
+        if ($library === null) {
+            $library = $this->buildLibrary();
         }
 
-        return $this->boot['library.services'];
+        return $library;
     }
 }

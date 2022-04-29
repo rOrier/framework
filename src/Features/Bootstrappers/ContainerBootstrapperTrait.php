@@ -26,7 +26,10 @@ use ROrier\Container\Services\ServiceBuilderModules\FactoryModule;
 
 trait ContainerBootstrapperTrait
 {
-    public function buildContainer(): self
+    /**
+     * @return ContainerInterface
+     */
+    protected function buildContainer(): ContainerInterface
     {
         $container = new Container(
             $this->getLibrary(),
@@ -37,7 +40,7 @@ trait ContainerBootstrapperTrait
 
         $this->boot['container'] = $container;
 
-        return $this;
+        return $container;
     }
 
     protected function getServiceFactory(): ServiceFactoryInterface
@@ -117,10 +120,12 @@ trait ContainerBootstrapperTrait
      */
     protected function getContainer(): ContainerInterface
     {
-        if (!isset($this->boot['container'])) {
-            throw new Exception("Service container not found. Use buildContainer() to make it available.");
+        static $container = null;
+
+        if ($container === null) {
+            $container = $this->buildContainer();
         }
 
-        return $this->boot['container'];
+        return $container;
     }
 }
