@@ -17,7 +17,7 @@ use ROrier\Core\Interfaces\PackageInterface;
 
 trait ParametersBootstrapperTrait
 {
-    private array $additionalData = array();
+    private array $additionalParametersData = array();
 
     /**
      * @param array $data
@@ -30,7 +30,7 @@ trait ParametersBootstrapperTrait
             throw new Exception("Parameters already built. Add parameters data before using buildParameters().");
         }
 
-        $this->additionalData[] = $data;
+        $this->additionalParametersData[] = $data;
 
         return $this;
     }
@@ -62,7 +62,7 @@ trait ParametersBootstrapperTrait
             $data->merge($package->buildParameters());
         }
 
-        foreach ($this->additionalData as $additionalData) {
+        foreach ($this->additionalParametersData as $additionalData) {
             $data->merge($additionalData);
         }
 

@@ -13,7 +13,7 @@ use ROrier\Container\Services\ServiceSpecCompilers\InheritanceCompiler;
 
 trait LibraryBootstrapperTrait
 {
-    private array $additionalData = array();
+    private array $additionalServicesData = array();
 
     /**
      * @param array $data
@@ -26,7 +26,7 @@ trait LibraryBootstrapperTrait
             throw new Exception("Library already built. Add services data before using buildParameters().");
         }
 
-        $this->additionalData[] = $data;
+        $this->additionalServicesData[] = $data;
 
         return $this;
     }
@@ -50,7 +50,7 @@ trait LibraryBootstrapperTrait
             CollectionTool::merge($data, $package->buildServices());
         }
 
-        foreach ($this->additionalData as $additionalData) {
+        foreach ($this->additionalServicesData as $additionalData) {
             CollectionTool::merge($data, $additionalData);
         }
 
