@@ -17,27 +17,29 @@ abstract class Main implements MainInterface
      */
     static public function boot(): Bootstrapper
     {
-        $config = [
-            'main_class_name' => static::class
-        ];
+        $config = [];
 
-        $stack = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
-        $trace = array_pop($stack);
-
-        if (self::isValidTrace($trace)) {
-            $config['root'] = dirname($trace['file']);
-        }
+        self::inferConfiguration(
+            $config,
+            debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1)
+        );
 
         return new Bootstrapper($config);
     }
 
     /**
-     * @param mixed $trace
-     * @return bool
+     * @param array $config
+     * @param array $stack
      */
-    static protected function isValidTrace($trace)
+    static protected function inferConfiguration(array &$config, array $stack): void
     {
-        return is_array($trace) && array_key_exists('file', $trace) && !empty($trace['file']);
+        $trace = array_pop($stack);
+
+        if (is_array($trace) && array_key_exists('file', $trace) && !empty($trace['file'])) {
+            $config['root'] = dirname($trace['file']);
+        }
+
+        $config['main_class_name'] = static::class;
     }
 
     /**
