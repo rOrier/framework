@@ -7,9 +7,10 @@ use ROrier\Core\Components\Bootstrapper;
 interface MainInterface
 {
     /**
+     * @param array $runtimeConfiguration
      * @return Bootstrapper
      */
-    static public function boot(): Bootstrapper;
+    static public function boot(array $runtimeConfiguration = []): Bootstrapper;
 
     /**
      * @return AppInterface
