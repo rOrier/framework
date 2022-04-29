@@ -5,13 +5,14 @@ namespace ROrier\Core;
 use Exception;
 use ROrier\Core\Components\Bootstrapper;
 use ROrier\Core\Interfaces\AppInterface;
+use ROrier\Core\Interfaces\MainInterface;
 
-abstract class Main
+abstract class Main implements MainInterface
 {
     static private ?AppInterface $app = null;
 
     /**
-     * @return Bootstrapper
+     * @inheritDoc
      * @throws Exception
      */
     static public function boot(): Bootstrapper
@@ -40,7 +41,7 @@ abstract class Main
     }
 
     /**
-     * @return AppInterface
+     * @inheritDoc
      * @throws Exception
      */
     public static function app(): AppInterface
@@ -52,7 +53,10 @@ abstract class Main
         return self::$app;
     }
 
-    static public function save(AppInterface $app)
+    /**
+     * @inheritDoc
+     */
+    static public function save(AppInterface $app): void
     {
         static::$app = $app;
     }
