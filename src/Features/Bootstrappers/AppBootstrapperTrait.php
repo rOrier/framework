@@ -7,7 +7,6 @@ use ROrier\Container\Exceptions\ContainerException;
 use ROrier\Container\Interfaces\ContainerInterface;
 use ROrier\Container\Interfaces\ServiceLibraryInterface;
 use ROrier\Core\Interfaces\AppInterface;
-use ROrier\Core\Main;
 
 trait AppBootstrapperTrait
 {
