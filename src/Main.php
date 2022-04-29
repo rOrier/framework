@@ -3,6 +3,7 @@
 namespace ROrier\Core;
 
 use Exception;
+use ROrier\Config\Tools\CollectionTool;
 use ROrier\Core\Components\Bootstrapper;
 use ROrier\Core\Interfaces\AppInterface;
 use ROrier\Core\Interfaces\MainInterface;
@@ -26,7 +27,7 @@ abstract class Main implements MainInterface
             debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1)
         );
 
-        $config = array_merge($config, $runtimeConfiguration);
+        CollectionTool::merge($config, $runtimeConfiguration);
 
         return static::buildBootstrapper($config);
     }

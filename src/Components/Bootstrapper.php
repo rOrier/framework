@@ -4,6 +4,7 @@ namespace ROrier\Core\Components;
 
 use Exception;
 use ROrier\Config\ConfigPackage;
+use ROrier\Config\Tools\CollectionTool;
 use ROrier\Container\ContainerPackage;
 use ROrier\Core\CorePackage;
 use ROrier\Core\Features\Bootstrappers\AppBootstrapperTrait;
@@ -51,7 +52,7 @@ class Bootstrapper
 
     protected array $services = [];
 
-    protected array $config = [];
+    protected array $config = self::DEFAULT_CONFIGURATION;
 
     protected array $requestedServiceBuilding = [];
 
@@ -61,7 +62,7 @@ class Bootstrapper
      */
     public function __construct(array $config = [])
     {
-        $this->config = array_merge(self::DEFAULT_CONFIGURATION, $config);
+        $this->config($config);
     }
 
     /**
@@ -69,7 +70,7 @@ class Bootstrapper
      */
     protected function config(array $data): void
     {
-        $this->config = array_merge($this->config, $data);
+        CollectionTool::merge($this->config, $data);
     }
 
     /**
