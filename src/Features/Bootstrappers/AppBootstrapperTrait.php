@@ -38,7 +38,9 @@ trait AppBootstrapperTrait
 
         $this->saveFixedServices();
 
-        Main::save($app);
+        $mainClassName = $this->config['main_class_name'];
+
+        $mainClassName::save($app);
     }
 
     /**

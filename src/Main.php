@@ -16,7 +16,9 @@ abstract class Main
      */
     static public function boot(): Bootstrapper
     {
-        $config = [];
+        $config = [
+            'main_class_name' => static::class
+        ];
 
         $stack = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
         $trace = array_pop($stack);
