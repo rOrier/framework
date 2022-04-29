@@ -31,16 +31,14 @@ trait AppBootstrapperTrait
 
     /**
      * @throws ContainerException
+     * @throws Exception
      */
     public function finalize(): void
     {
         $app = $this->getService('app');
 
         $this->saveFixedServices();
-
-        $mainClassName = $this->config['main_class_name'];
-
-        $mainClassName::save($app);
+        $this->saveApp($app);
     }
 
     /**
@@ -75,6 +73,20 @@ trait AppBootstrapperTrait
                 $container->setService($fixedService, $this->getService($fixedService));
             }
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function saveApp(AppInterface $app): void
+    {
+        $mainClassName = $this->config['main_class_name'];
+
+        if (!in_array('ROrier\Core\Interfaces\MainInterface', class_implements($mainClassName))) {
+            throw new Exception("Main class '$mainClassName' must implements 'ROrier\Core\Interfaces\MainInterface' interface.");
+        }
+
+        $mainClassName::save($app);
     }
 
     /**
