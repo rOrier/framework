@@ -11,22 +11,37 @@ use ROrier\Core\Interfaces\KernelInterface;
 
 trait KernelBootstrapperTrait
 {
-    private array $coreClassNames = [
+    private array $corePackages = [
         CorePackage::class,
         ContainerPackage::class,
         ConfigPackage::class
     ];
 
+    private array $additionalPackages = [];
+
     /**
-     * @param string[] $userClassNames
+     * @param string[] $userPackages
+     * @return self
+     */
+    public function addPackages(array $userPackages): self
+    {
+        $this->additionalPackages = array_merge(
+            $this->additionalPackages,
+            $userPackages
+        );
+
+        return $this;
+    }
+
+    /**
      * @return self
      * @throws Exception
      */
-    public function buildKernel(array $userClassNames): self
+    public function buildKernel(): self
     {
         $kernel = new Kernel();
 
-        $classNames = array_unique(array_merge($this->coreClassNames, $userClassNames));
+        $classNames = array_unique(array_merge($this->corePackages, $this->additionalPackages));
 
         foreach ($classNames as $className) {
             $package = new $className();
