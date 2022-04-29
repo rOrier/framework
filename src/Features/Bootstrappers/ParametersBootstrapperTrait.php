@@ -48,8 +48,6 @@ trait ParametersBootstrapperTrait
 
         $this->getDelayedParameters()->setParameters($parameters);
 
-        $this->boot['parameters'] = $parameters;
-
         return $parameters;
     }
 
@@ -77,7 +75,7 @@ trait ParametersBootstrapperTrait
      */
     protected function buildConfigAnalyzer(): Analyzer
     {
-        return $this->boot['analyzer.config'] = new Analyzer([
+        return new Analyzer([
             new ConstantParser(),
             new EnvParser(),
             new StringParameterParser($this->getDelayedParameters()),
@@ -105,13 +103,7 @@ trait ParametersBootstrapperTrait
      */
     protected function getParameters(): ParametersInterface
     {
-        static $parameters = null;
-
-        if ($parameters === null) {
-            $parameters = $this->buildParameters();
-        }
-
-        return $parameters;
+        return $this->getService('parameters');
     }
 
     /**
@@ -120,12 +112,6 @@ trait ParametersBootstrapperTrait
      */
     protected function getConfigAnalyzer(): AnalyzerInterface
     {
-        static $configAnalyzer = null;
-
-        if ($configAnalyzer === null) {
-            $configAnalyzer = $this->buildConfigAnalyzer();
-        }
-
-        return $configAnalyzer;
+        return $this->getService('analyzer.config');
     }
 }

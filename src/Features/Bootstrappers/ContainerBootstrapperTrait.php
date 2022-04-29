@@ -38,8 +38,6 @@ trait ContainerBootstrapperTrait
 
         $this->getDelayedContainer()->setContainer($container);
 
-        $this->boot['container'] = $container;
-
         return $container;
     }
 
@@ -120,12 +118,6 @@ trait ContainerBootstrapperTrait
      */
     protected function getContainer(): ContainerInterface
     {
-        static $container = null;
-
-        if ($container === null) {
-            $container = $this->buildContainer();
-        }
-
-        return $container;
+        return $this->getService('container');
     }
 }

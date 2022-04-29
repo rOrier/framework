@@ -48,8 +48,6 @@ trait KernelBootstrapperTrait
             $kernel->addPackage($package);
         }
 
-        $this->boot['kernel'] = $kernel;
-
         return $kernel;
     }
 
@@ -59,12 +57,6 @@ trait KernelBootstrapperTrait
      */
     protected function getKernel(): KernelInterface
     {
-        static $kernel = null;
-
-        if ($kernel === null) {
-            $kernel = $this->buildKernel();
-        }
-
-        return $kernel;
+        return $this->getService('kernel');
     }
 }

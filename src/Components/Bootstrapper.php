@@ -23,9 +23,22 @@ class Bootstrapper
 
     protected array $builders = [];
 
+    /**
+     * Bootstrapper constructor.
+     * @param Boot $boot
+     * @throws Exception
+     */
     public function __construct(Boot $boot)
     {
         $this->boot = $boot;
+
+        $this->registerBuilders([
+            'kernel' => 'buildKernel',
+            'parameters' => 'buildParameters',
+            'analyzer.config' => 'buildConfigAnalyzer',
+            'library.services' => 'buildLibrary',
+            'container' => 'buildContainer'
+        ]);
     }
 
     /**
