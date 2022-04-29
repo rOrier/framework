@@ -4,6 +4,7 @@ namespace ROrier\Core\Features\Bootstrappers;
 
 use Exception;
 use ROrier\Core\Interfaces\AppInterface;
+use ROrier\Core\Main;
 
 trait AppBootstrapperTrait
 {
@@ -37,13 +38,24 @@ trait AppBootstrapperTrait
 
     /**
      * @param string|null $className
-     * @return AppInterface
      * @throws Exception
      */
-    public function buildApp(?string $className = self::APP_CLASS_NAME): AppInterface
+    public function finalize(?string $className = self::APP_CLASS_NAME): void
     {
         $this->saveKnownServices();
 
+        $app = $this->buildApp($className);
+
+        Main::save($app);
+    }
+
+    /**
+     * @param string $className
+     * @return AppInterface
+     * @throws Exception
+     */
+    protected function buildApp(string $className): AppInterface
+    {
         return new $className(
             $this->getRoot(),
             $this->getKernel(),
