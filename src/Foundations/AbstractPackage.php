@@ -10,6 +10,9 @@ abstract class AbstractPackage implements PackageInterface
 {
     protected const CONFIG_LOADER = 'ROrier\Core\Components\ConfigLoaders\YamlLoader';
 
+    public const PATH_PARAMETERS = '/../config/parameters';
+    public const PATH_SERVICES = '/../config/services';
+
     private string $root;
 
     private string $name;
@@ -52,10 +55,8 @@ abstract class AbstractPackage implements PackageInterface
         return $this->configLoader;
     }
 
-    protected function loadConfig($type): array
+    protected function loadConfig($path): array
     {
-        $path = $this->getConfigPath() . DIRECTORY_SEPARATOR . $type;
-
         return is_dir($path) ? $this->getConfigLoader()->load($path) : [];
     }
 
@@ -69,11 +70,15 @@ abstract class AbstractPackage implements PackageInterface
 
     public function buildParameters(): array
     {
-        return $this->loadConfig('parameters');
+        $path = realpath($this->getRoot() . static::PATH_PARAMETERS);
+
+        return $this->loadConfig($path);
     }
 
     public function buildServices(): array
     {
-        return $this->loadConfig('services');
+        $path = realpath($this->getRoot() . static::PATH_SERVICES);
+
+        return $this->loadConfig($path);
     }
 }
