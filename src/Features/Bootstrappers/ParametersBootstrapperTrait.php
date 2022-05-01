@@ -12,6 +12,7 @@ use ROrier\Config\Services\ConfigParsers\EnvParser;
 use ROrier\Config\Services\ConfigParsers\StringParameterParser;
 use ROrier\Config\Services\DelayedProxies\ParametersProxy;
 use ROrier\Config\Services\Parameters;
+use ROrier\Core\Interfaces\ConfigLoaderInterface;
 use ROrier\Core\Interfaces\KernelInterface;
 use ROrier\Core\Interfaces\PackageInterface;
 
@@ -63,7 +64,14 @@ trait ParametersBootstrapperTrait
 
         /** @var PackageInterface $package */
         foreach ($kernel->getPackages() as $package) {
-            $data->merge($package->buildParameters());
+            $path = $package->getParametersConfigPath();
+
+            if (!empty($path) && is_dir($path)) {
+                /** @var ConfigLoaderInterface $configLoader */
+                $configLoader = $this->getConfigLoader($package::CONFIG_LOADER);
+
+                $data->merge($configLoader->load($path));
+            }
         }
 
         foreach ($this->additionalParametersData as $additionalData) {
