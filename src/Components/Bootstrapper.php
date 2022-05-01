@@ -12,6 +12,7 @@ use ROrier\Core\Features\Bootstrappers\ContainerBootstrapperTrait;
 use ROrier\Core\Features\Bootstrappers\KernelBootstrapperTrait;
 use ROrier\Core\Features\Bootstrappers\LibraryBootstrapperTrait;
 use ROrier\Core\Features\Bootstrappers\ParametersBootstrapperTrait;
+use ROrier\Core\Interfaces\ConfigLoaderInterface;
 use ROrier\Core\Main;
 
 class Bootstrapper
@@ -55,6 +56,8 @@ class Bootstrapper
     protected array $config = self::DEFAULT_CONFIGURATION;
 
     protected array $requestedServiceBuilding = [];
+
+    protected array $configLoaders = [];
 
     /**
      * Bootstrapper constructor.
@@ -114,5 +117,18 @@ class Bootstrapper
         $this->requestedServiceBuilding[] = $name;
 
         return call_user_func([$this, $builders[$name]]);
+    }
+
+    /**
+     * @param string $className
+     * @return ConfigLoaderInterface
+     */
+    protected function getConfigLoader(string $className): ConfigLoaderInterface
+    {
+        if (!isset($this->configLoaders[$className])) {
+            $this->configLoaders[$className] = new $className();
+        }
+
+        return $this->configLoaders[$className];
     }
 }
