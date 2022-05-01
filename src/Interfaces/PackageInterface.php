@@ -22,7 +22,12 @@ interface PackageInterface
     /**
      * @return string
      */
-    public function getConfigPath(): string;
+    public function getParametersConfigPath(): string;
+
+    /**
+     * @return string
+     */
+    public function getServicesConfigPath(): string;
 
     /**
      * @return array

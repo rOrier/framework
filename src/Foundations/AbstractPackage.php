@@ -58,21 +58,29 @@ abstract class AbstractPackage implements PackageInterface
     /**
      * @inheritDoc
      */
-    public function getConfigPath(): string
+    public function getParametersConfigPath(): string
     {
-        return realpath($this->getRoot() . DIRECTORY_SEPARATOR . '_config');
+        return realpath($this->getRoot() . static::PATH_PARAMETERS);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getServicesConfigPath(): string
+    {
+        return realpath($this->getRoot() . static::PATH_SERVICES);
     }
 
     public function buildParameters(): array
     {
-        $path = realpath($this->getRoot() . static::PATH_PARAMETERS);
+        $path = $this->getParametersConfigPath();
 
         return $this->loadConfig($path);
     }
 
     public function buildServices(): array
     {
-        $path = realpath($this->getRoot() . static::PATH_SERVICES);
+        $path = $this->getServicesConfigPath();
 
         return $this->loadConfig($path);
     }
