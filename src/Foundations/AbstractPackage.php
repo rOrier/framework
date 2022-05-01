@@ -8,11 +8,6 @@ use ROrier\Core\Interfaces\PackageInterface;
 
 abstract class AbstractPackage implements PackageInterface
 {
-    protected const CONFIG_LOADER = 'ROrier\Core\Components\ConfigLoaders\YamlLoader';
-
-    public const PATH_PARAMETERS = '/../config/parameters';
-    public const PATH_SERVICES = '/../config/services';
-
     private string $root;
 
     private string $name;

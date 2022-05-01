@@ -4,6 +4,11 @@ namespace ROrier\Core\Interfaces;
 
 interface PackageInterface
 {
+    public const CONFIG_LOADER = 'ROrier\Core\Components\ConfigLoaders\YamlLoader';
+
+    public const PATH_PARAMETERS = '/../config/parameters';
+    public const PATH_SERVICES = '/../config/services';
+
     /**
      * @return string
      */
