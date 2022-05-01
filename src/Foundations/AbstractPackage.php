@@ -3,7 +3,6 @@
 namespace ROrier\Core\Foundations;
 
 use ReflectionObject;
-use ROrier\Core\Interfaces\ConfigLoaderInterface;
 use ROrier\Core\Interfaces\PackageInterface;
 
 abstract class AbstractPackage implements PackageInterface
@@ -11,8 +10,6 @@ abstract class AbstractPackage implements PackageInterface
     private string $root;
 
     private string $name;
-
-    private ConfigLoaderInterface $configLoader;
 
     /**
      * @inheritDoc
@@ -40,21 +37,6 @@ abstract class AbstractPackage implements PackageInterface
         return $this->name;
     }
 
-    protected function getConfigLoader(): ConfigLoaderInterface
-    {
-        if (!isset($this->configLoader)) {
-            $configLoaderClassName = static::CONFIG_LOADER;
-            $this->configLoader = new $configLoaderClassName();
-        }
-
-        return $this->configLoader;
-    }
-
-    protected function loadConfig($path): array
-    {
-        return is_dir($path) ? $this->getConfigLoader()->load($path) : [];
-    }
-
     /**
      * @inheritDoc
      */
@@ -69,19 +51,5 @@ abstract class AbstractPackage implements PackageInterface
     public function getServicesConfigPath(): string
     {
         return realpath($this->getRoot() . static::PATH_SERVICES);
-    }
-
-    public function buildParameters(): array
-    {
-        $path = $this->getParametersConfigPath();
-
-        return $this->loadConfig($path);
-    }
-
-    public function buildServices(): array
-    {
-        $path = $this->getServicesConfigPath();
-
-        return $this->loadConfig($path);
     }
 }
