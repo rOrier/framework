@@ -51,6 +51,8 @@ class Bootstrapper
         'builders' => self::DEFAULT_BUILDERS_CONFIGURATION
     ];
 
+    protected const CUSTOM_CONFIGURATION = [];
+
     protected array $services = [];
 
     protected array $config = self::DEFAULT_CONFIGURATION;
@@ -61,19 +63,12 @@ class Bootstrapper
 
     /**
      * Bootstrapper constructor.
-     * @param array $config
+     * @param array $runtimeConfiguration
      */
-    public function __construct(array $config = [])
+    public function __construct(array $runtimeConfiguration = [])
     {
-        $this->config($config);
-    }
-
-    /**
-     * @param array $data
-     */
-    protected function config(array $data): void
-    {
-        CollectionTool::merge($this->config, $data);
+        CollectionTool::merge($this->config, static::CUSTOM_CONFIGURATION);
+        CollectionTool::merge($this->config, $runtimeConfiguration);
     }
 
     /**
