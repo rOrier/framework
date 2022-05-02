@@ -2,7 +2,9 @@
 
 namespace ROrier\Core\Interfaces;
 
-interface PackageInterface
+use ArrayAccess;
+
+interface PackageInterface extends ArrayAccess
 {
     public const CONFIG_LOADER = 'ROrier\Core\Components\ConfigLoaders\YamlLoader';
 
