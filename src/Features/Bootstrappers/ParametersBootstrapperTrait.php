@@ -68,7 +68,7 @@ trait ParametersBootstrapperTrait
 
             if (!empty($path) && is_dir($path)) {
                 /** @var ConfigLoaderInterface $configLoader */
-                $configLoader = $this->getConfigLoader($package::CONFIG_LOADER);
+                $configLoader = $this->getPackageLoader($package);
 
                 $data->merge($configLoader->load($path));
             }

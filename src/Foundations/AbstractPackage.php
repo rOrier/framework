@@ -12,6 +12,10 @@ abstract class AbstractPackage implements PackageInterface
     private const DEFAULT_CONFIGURATION = [
         'name' => null,
         'root' => null,
+        'loader' => [
+            'class' => null,
+            'type' => 'yaml'
+        ],
         'config' => [
             'parameters' => [
                 'path' => '/../config/parameters'

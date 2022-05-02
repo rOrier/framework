@@ -57,7 +57,7 @@ trait LibraryBootstrapperTrait
 
             if (!empty($path) && is_dir($path)) {
                 /** @var ConfigLoaderInterface $configLoader */
-                $configLoader = $this->getConfigLoader($package::CONFIG_LOADER);
+                $configLoader = $this->getPackageLoader($package);
 
                 CollectionTool::merge($data, $configLoader->load($path));
             }
