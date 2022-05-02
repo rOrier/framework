@@ -2,31 +2,79 @@
 
 namespace ROrier\Core\Foundations;
 
+use Exception;
 use ReflectionObject;
-use ROrier\Core\Interfaces\ConfigLoaderInterface;
+use ROrier\Config\Components\Bag;
 use ROrier\Core\Interfaces\PackageInterface;
 
 abstract class AbstractPackage implements PackageInterface
 {
-    protected const CONFIG_LOADER = 'ROrier\Core\Components\ConfigLoaders\YamlLoader';
+    private const DEFAULT_CONFIGURATION = [
+        'name' => null,
+        'root' => null,
+        'loader' => [
+            'class' => null,
+            'type' => 'yaml'
+        ],
+        'config' => [
+            'parameters' => [
+                'path' => '/../config/parameters'
+            ],
+            'services' => [
+                'path' => '/../config/services'
+            ]
+        ]
+    ];
 
-    private string $root;
+    protected const CUSTOM_CONFIGURATION = [];
 
-    private string $name;
+    private Bag $config;
 
-    private ConfigLoaderInterface $configLoader;
+    public function __construct()
+    {
+        $this->config = new Bag(self::DEFAULT_CONFIGURATION);
+
+        $this->config->merge(static::CUSTOM_CONFIGURATION);
+
+        if (!$this['root']) {
+            $this->config->merge([
+                'root' => $this->buildRoot()
+            ]);
+        }
+
+        if (!$this['name']) {
+            $this->config->merge([
+                'name' => $this->buildName()
+            ]);
+        }
+    }
+
+    /**
+     * @return string
+     */
+    protected function buildRoot()
+    {
+        $reflected = new ReflectionObject($this);
+
+        return dirname($reflected->getFileName());
+    }
 
     /**
      * @inheritDoc
      */
     public function getRoot(): string
     {
-        if (!isset($this->root)) {
-            $reflected = new ReflectionObject($this);
-            $this->root = dirname($reflected->getFileName());
-        }
+        return $this['root'];
+    }
 
-        return $this->root;
+    /**
+     * @return string
+     */
+    public function buildName(): string
+    {
+        $pos = strrpos(static::class, '\\');
+
+        return ($pos === false) ? static::class : substr(static::class, $pos + 1);
     }
 
     /**
@@ -34,46 +82,63 @@ abstract class AbstractPackage implements PackageInterface
      */
     public function getName(): string
     {
-        if (!isset($this->name)) {
-            $pos = strrpos(static::class, '\\');
-            $this->name = (false === $pos) ? static::class : substr(static::class, $pos + 1);
-        }
-
-        return $this->name;
-    }
-
-    protected function getConfigLoader(): ConfigLoaderInterface
-    {
-        if (!isset($this->configLoader)) {
-            $configLoaderClassName = static::CONFIG_LOADER;
-            $this->configLoader = new $configLoaderClassName();
-        }
-
-        return $this->configLoader;
-    }
-
-    protected function loadConfig($type): array
-    {
-        $path = $this->getConfigPath() . DIRECTORY_SEPARATOR . $type;
-
-        return is_dir($path) ? $this->getConfigLoader()->load($path) : [];
+        return $this['name'];
     }
 
     /**
      * @inheritDoc
      */
-    public function getConfigPath(): string
+    public function getParametersConfigPath(): string
     {
-        return realpath($this->getRoot() . DIRECTORY_SEPARATOR . '_config');
+        return realpath($this->getRoot() . $this['config.parameters.path']);
     }
 
-    public function buildParameters(): array
+    /**
+     * @inheritDoc
+     */
+    public function getServicesConfigPath(): string
     {
-        return $this->loadConfig('parameters');
+        return realpath($this->getRoot() . $this['config.services.path']);
     }
 
-    public function buildServices(): array
+    // ###################################################################
+    // ###       Array access
+    // ###################################################################
+
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     * @throws Exception
+     */
+    public function offsetSet($offset, $value)
     {
-        return $this->loadConfig('services');
+        throw new Exception("Package configuration is read only.");
+    }
+
+    /**
+     * @param mixed $offset
+     * @return bool
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->config[$offset]);
+    }
+
+    /**
+     * @param mixed $offset
+     * @throws Exception
+     */
+    public function offsetUnset($offset)
+    {
+        throw new Exception("Package configuration is read only.");
+    }
+
+    /**
+     * @param mixed $offset
+     * @return array|bool|mixed|null
+     */
+    public function offsetGet($offset)
+    {
+        return $this->config[$offset];
     }
 }

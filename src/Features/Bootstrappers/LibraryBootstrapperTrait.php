@@ -5,6 +5,7 @@ namespace ROrier\Core\Features\Bootstrappers;
 use Exception;
 use ROrier\Config\Tools\CollectionTool;
 use ROrier\Container\Interfaces\ServiceLibraryInterface;
+use ROrier\Core\Interfaces\ConfigLoaderInterface;
 use ROrier\Core\Interfaces\KernelInterface;
 use ROrier\Core\Interfaces\PackageInterface;
 use ROrier\Container\Services\Compilator;
@@ -52,7 +53,14 @@ trait LibraryBootstrapperTrait
 
         /** @var PackageInterface $package */
         foreach ($kernel->getPackages() as $package) {
-            CollectionTool::merge($data, $package->buildServices());
+            $path = $package->getServicesConfigPath();
+
+            if (!empty($path) && is_dir($path)) {
+                /** @var ConfigLoaderInterface $configLoader */
+                $configLoader = $this->getPackageLoader($package);
+
+                CollectionTool::merge($data, $configLoader->load($path));
+            }
         }
 
         foreach ($this->additionalServicesData as $additionalData) {

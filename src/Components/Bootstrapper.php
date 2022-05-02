@@ -12,6 +12,7 @@ use ROrier\Core\Features\Bootstrappers\ContainerBootstrapperTrait;
 use ROrier\Core\Features\Bootstrappers\KernelBootstrapperTrait;
 use ROrier\Core\Features\Bootstrappers\LibraryBootstrapperTrait;
 use ROrier\Core\Features\Bootstrappers\ParametersBootstrapperTrait;
+use ROrier\Core\Interfaces\ConfigLoaderInterface;
 use ROrier\Core\Main;
 
 class Bootstrapper
@@ -50,27 +51,24 @@ class Bootstrapper
         'builders' => self::DEFAULT_BUILDERS_CONFIGURATION
     ];
 
+    protected const CUSTOM_CONFIGURATION = [];
+
     protected array $services = [];
 
     protected array $config = self::DEFAULT_CONFIGURATION;
 
     protected array $requestedServiceBuilding = [];
 
-    /**
-     * Bootstrapper constructor.
-     * @param array $config
-     */
-    public function __construct(array $config = [])
-    {
-        $this->config($config);
-    }
+    protected array $configLoaders = [];
 
     /**
-     * @param array $data
+     * Bootstrapper constructor.
+     * @param array $runtimeConfiguration
      */
-    protected function config(array $data): void
+    public function __construct(array $runtimeConfiguration = [])
     {
-        CollectionTool::merge($this->config, $data);
+        CollectionTool::merge($this->config, static::CUSTOM_CONFIGURATION);
+        CollectionTool::merge($this->config, $runtimeConfiguration);
     }
 
     /**
@@ -114,5 +112,18 @@ class Bootstrapper
         $this->requestedServiceBuilding[] = $name;
 
         return call_user_func([$this, $builders[$name]]);
+    }
+
+    /**
+     * @param string $className
+     * @return ConfigLoaderInterface
+     */
+    protected function getConfigLoader(string $className): ConfigLoaderInterface
+    {
+        if (!isset($this->configLoaders[$className])) {
+            $this->configLoaders[$className] = new $className();
+        }
+
+        return $this->configLoaders[$className];
     }
 }

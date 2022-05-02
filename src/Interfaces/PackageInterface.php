@@ -2,7 +2,9 @@
 
 namespace ROrier\Core\Interfaces;
 
-interface PackageInterface
+use ArrayAccess;
+
+interface PackageInterface extends ArrayAccess
 {
     /**
      * @return string
@@ -17,15 +19,10 @@ interface PackageInterface
     /**
      * @return string
      */
-    public function getConfigPath(): string;
+    public function getParametersConfigPath(): string;
 
     /**
-     * @return array
+     * @return string
      */
-    public function buildParameters(): array;
-
-    /**
-     * @return array
-     */
-    public function buildServices(): array;
+    public function getServicesConfigPath(): string;
 }
