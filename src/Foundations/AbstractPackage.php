@@ -10,6 +10,8 @@ use ROrier\Core\Interfaces\PackageInterface;
 abstract class AbstractPackage implements PackageInterface
 {
     private const DEFAULT_CONFIGURATION = [
+        'name' => null,
+        'root' => null,
         'config' => [
             'parameters' => [
                 'path' => '/../config/parameters'
@@ -22,10 +24,6 @@ abstract class AbstractPackage implements PackageInterface
 
     protected const CUSTOM_CONFIGURATION = [];
 
-    private string $root;
-
-    private string $name;
-
     private Bag $config;
 
     public function __construct()
@@ -33,6 +31,28 @@ abstract class AbstractPackage implements PackageInterface
         $this->config = new Bag(self::DEFAULT_CONFIGURATION);
 
         $this->config->merge(static::CUSTOM_CONFIGURATION);
+
+        if (!$this['root']) {
+            $this->config->merge([
+                'root' => $this->buildRoot()
+            ]);
+        }
+
+        if (!$this['name']) {
+            $this->config->merge([
+                'name' => $this->buildName()
+            ]);
+        }
+    }
+
+    /**
+     * @return string
+     */
+    protected function buildRoot()
+    {
+        $reflected = new ReflectionObject($this);
+
+        return dirname($reflected->getFileName());
     }
 
     /**
@@ -40,12 +60,17 @@ abstract class AbstractPackage implements PackageInterface
      */
     public function getRoot(): string
     {
-        if (!isset($this->root)) {
-            $reflected = new ReflectionObject($this);
-            $this->root = dirname($reflected->getFileName());
-        }
+        return $this['root'];
+    }
 
-        return $this->root;
+    /**
+     * @return string
+     */
+    public function buildName(): string
+    {
+        $pos = strrpos(static::class, '\\');
+
+        return ($pos === false) ? static::class : substr(static::class, $pos + 1);
     }
 
     /**
@@ -53,12 +78,7 @@ abstract class AbstractPackage implements PackageInterface
      */
     public function getName(): string
     {
-        if (!isset($this->name)) {
-            $pos = strrpos(static::class, '\\');
-            $this->name = (false === $pos) ? static::class : substr(static::class, $pos + 1);
-        }
-
-        return $this->name;
+        return $this['name'];
     }
 
     /**
