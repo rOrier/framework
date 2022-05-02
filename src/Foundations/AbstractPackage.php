@@ -9,6 +9,19 @@ use ROrier\Core\Interfaces\PackageInterface;
 
 abstract class AbstractPackage implements PackageInterface
 {
+    private const DEFAULT_CONFIGURATION = [
+        'config' => [
+            'parameters' => [
+                'path' => '/../config/parameters'
+            ],
+            'services' => [
+                'path' => '/../config/services'
+            ]
+        ]
+    ];
+
+    protected const CUSTOM_CONFIGURATION = [];
+
     private string $root;
 
     private string $name;
@@ -17,7 +30,9 @@ abstract class AbstractPackage implements PackageInterface
 
     public function __construct()
     {
-        $this->config = new Bag();
+        $this->config = new Bag(self::DEFAULT_CONFIGURATION);
+
+        $this->config->merge(static::CUSTOM_CONFIGURATION);
     }
 
     /**
@@ -51,7 +66,7 @@ abstract class AbstractPackage implements PackageInterface
      */
     public function getParametersConfigPath(): string
     {
-        return realpath($this->getRoot() . static::PATH_PARAMETERS);
+        return realpath($this->getRoot() . $this['config.parameters.path']);
     }
 
     /**
@@ -59,7 +74,7 @@ abstract class AbstractPackage implements PackageInterface
      */
     public function getServicesConfigPath(): string
     {
-        return realpath($this->getRoot() . static::PATH_SERVICES);
+        return realpath($this->getRoot() . $this['config.services.path']);
     }
 
     // ###################################################################
@@ -82,7 +97,7 @@ abstract class AbstractPackage implements PackageInterface
      */
     public function offsetExists($offset)
     {
-        return isset($this->data[$offset]);
+        return isset($this->config[$offset]);
     }
 
     /**
@@ -100,6 +115,6 @@ abstract class AbstractPackage implements PackageInterface
      */
     public function offsetGet($offset)
     {
-        return $this->data[$offset];
+        return $this->config[$offset];
     }
 }
