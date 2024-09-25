@@ -51,6 +51,8 @@ class Bootstrapper
         'builders' => self::DEFAULT_BUILDERS_CONFIGURATION
     ];
 
+    protected const DEFAULT_MASK = 0644;
+
     protected const CUSTOM_CONFIGURATION = [];
 
     protected array $services = [];
@@ -74,7 +76,7 @@ class Bootstrapper
 
         if (isset($this->config['var_cache_folder'])) {
             $src = $this->config['var_cache_folder'];
-            $mask = $this->config['var_cache_mask'] ?? 0777;
+            $mask = $this->config['var_cache_mask'] ?? static::DEFAULT_MASK;
 
             if ($this->buildCacheFolder($src, $mask)) {
                 $this->var_cache_folder = $src;
@@ -143,7 +145,7 @@ class Bootstrapper
         return $this->var_cache_folder;
     }
 
-    protected function buildCacheFolder(string $src, int $mask = 0777): bool
+    protected function buildCacheFolder(string $src, int $mask = self::DEFAULT_MASK): bool
     {
         if (is_dir($src)) {
             return true;
