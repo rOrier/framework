@@ -61,6 +61,8 @@ class Bootstrapper
 
     protected array $configLoaders = [];
 
+    protected ?string $var_cache_folder = null;
+
     /**
      * Bootstrapper constructor.
      * @param array $runtimeConfiguration
@@ -125,5 +127,10 @@ class Bootstrapper
         }
 
         return $this->configLoaders[$className];
+    }
+
+    protected function getCacheFolder(): ?string
+    {
+        return $this->var_cache_folder;
     }
 }
