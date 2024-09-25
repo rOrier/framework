@@ -55,7 +55,7 @@ trait ParametersBootstrapperTrait
     /**
      * @return Bag
      */
-    protected function buildParametersData()
+    protected function buildParametersData(): Bag
     {
         $data = new Bag();
 

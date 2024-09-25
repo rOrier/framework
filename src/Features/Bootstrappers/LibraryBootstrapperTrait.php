@@ -44,7 +44,7 @@ trait LibraryBootstrapperTrait
         );
     }
 
-    protected function buildServicesData()
+    protected function buildServicesData(): array
     {
         $data = [];
 
@@ -73,7 +73,7 @@ trait LibraryBootstrapperTrait
     /**
      * @return Compilator
      */
-    protected function buildSpecCompilator()
+    protected function buildSpecCompilator(): Compilator
     {
         return new Compilator([
             new InheritanceCompiler(),
