@@ -71,6 +71,15 @@ class Bootstrapper
     {
         CollectionTool::merge($this->config, static::CUSTOM_CONFIGURATION);
         CollectionTool::merge($this->config, $runtimeConfiguration);
+
+        if (isset($this->config['var_cache_folder'])) {
+            $src = $this->config['var_cache_folder'];
+            $mask = $this->config['var_cache_mask'] ?? 0777;
+
+            if ($this->buildCacheFolder($src, $mask)) {
+                $this->var_cache_folder = $src;
+            }
+        }
     }
 
     /**
@@ -132,5 +141,14 @@ class Bootstrapper
     protected function getCacheFolder(): ?string
     {
         return $this->var_cache_folder;
+    }
+
+    protected function buildCacheFolder(string $src, int $mask = 0777): bool
+    {
+        if (is_dir($src)) {
+            return true;
+        }
+
+        return mkdir($src, $mask, true);
     }
 }
