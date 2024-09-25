@@ -39,9 +39,31 @@ trait LibraryBootstrapperTrait
     protected function buildLibrary(): ServiceLibraryInterface
     {
         return new ServiceLibrary(
-            $this->buildServicesData(),
+            $this->getServicesData(),
             $this->getService('compilator.spec.services')
         );
+    }
+
+    protected function getServicesData(): array
+    {
+        if ($this->getCacheFolder()) {
+            $src = $this->getCacheFolder() . DIRECTORY_SEPARATOR . 'services.json';
+            if (is_file($src)) {
+                $jsonData = json_decode(file_get_contents($src), true);
+                if (is_array($jsonData)) {
+                    return $jsonData;
+                }
+            }
+        }
+
+        $data = $this->buildServicesData();
+
+        if ($this->getCacheFolder()) {
+            $src = $this->getCacheFolder() . DIRECTORY_SEPARATOR . 'services.json';
+            file_put_contents($src, json_encode($data));
+        }
+
+        return $data;
     }
 
     protected function buildServicesData(): array
