@@ -43,13 +43,35 @@ trait ParametersBootstrapperTrait
     protected function buildParameters(): ParametersInterface
     {
         $parameters = new Parameters(
-            $this->buildParametersData(),
+            $this->getParametersData(),
             $this->getService('analyzer.config')
         );
 
         $this->getDelayedParameters()->setParameters($parameters);
 
         return $parameters;
+    }
+
+    protected function getParametersData(): Bag
+    {
+        if ($this->getCacheFolder()) {
+            $src = $this->getCacheFolder() . DIRECTORY_SEPARATOR . 'parameters.json';
+            if (is_file($src)) {
+                $jsonData = json_decode(file_get_contents($src), true);
+                if (is_array($jsonData)) {
+                    return new Bag($jsonData);
+                }
+            }
+        }
+
+        $data = $this->buildParametersData();
+
+        if ($this->getCacheFolder()) {
+            $src = $this->getCacheFolder() . DIRECTORY_SEPARATOR . 'parameters.json';
+            file_put_contents($src, json_encode($data->toArray()));
+        }
+
+        return $data;
     }
 
     /**
