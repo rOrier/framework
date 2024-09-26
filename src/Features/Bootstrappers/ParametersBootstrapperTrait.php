@@ -12,9 +12,8 @@ use ROrier\Config\Services\ConfigParsers\EnvParser;
 use ROrier\Config\Services\ConfigParsers\StringParameterParser;
 use ROrier\Config\Services\DelayedProxies\ParametersProxy;
 use ROrier\Config\Services\Parameters;
-use ROrier\Core\Interfaces\ConfigLoaderInterface;
+use ROrier\Core\Components\DataLoader;
 use ROrier\Core\Interfaces\KernelInterface;
-use ROrier\Core\Interfaces\PackageInterface;
 
 trait ParametersBootstrapperTrait
 {
@@ -43,7 +42,7 @@ trait ParametersBootstrapperTrait
     protected function buildParameters(): ParametersInterface
     {
         $parameters = new Parameters(
-            $this->buildParametersData(),
+            $this->getParametersData(),
             $this->getService('analyzer.config')
         );
 
@@ -52,33 +51,16 @@ trait ParametersBootstrapperTrait
         return $parameters;
     }
 
-    /**
-     * @return Bag
-     */
-    protected function buildParametersData()
+    protected function getParametersData(): Bag
     {
-        $data = new Bag();
-
         /** @var KernelInterface $kernel */
         $kernel = $this->getService('kernel');
 
-        /** @var PackageInterface $package */
-        foreach ($kernel->getPackages() as $package) {
-            $path = $package->getParametersConfigPath();
+        $dataLoader = new DataLoader($kernel, $this);
 
-            if (!empty($path) && is_dir($path)) {
-                /** @var ConfigLoaderInterface $configLoader */
-                $configLoader = $this->getPackageLoader($package);
+        $data = $dataLoader->getData('getParametersConfigPath', 'parameters', $this->additionalServicesData);
 
-                $data->merge($configLoader->load($path));
-            }
-        }
-
-        foreach ($this->additionalParametersData as $additionalData) {
-            $data->merge($additionalData);
-        }
-
-        return $data;
+        return new Bag($data);
     }
 
     /**

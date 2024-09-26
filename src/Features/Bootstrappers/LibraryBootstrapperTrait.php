@@ -3,11 +3,9 @@
 namespace ROrier\Core\Features\Bootstrappers;
 
 use Exception;
-use ROrier\Config\Tools\CollectionTool;
 use ROrier\Container\Interfaces\ServiceLibraryInterface;
-use ROrier\Core\Interfaces\ConfigLoaderInterface;
+use ROrier\Core\Components\DataLoader;
 use ROrier\Core\Interfaces\KernelInterface;
-use ROrier\Core\Interfaces\PackageInterface;
 use ROrier\Container\Services\Compilator;
 use ROrier\Container\Services\Libraries\ServiceLibrary;
 use ROrier\Container\Services\ServiceSpecCompilers\FactoryCompiler;
@@ -39,41 +37,25 @@ trait LibraryBootstrapperTrait
     protected function buildLibrary(): ServiceLibraryInterface
     {
         return new ServiceLibrary(
-            $this->buildServicesData(),
+            $this->getServicesData(),
             $this->getService('compilator.spec.services')
         );
     }
 
-    protected function buildServicesData()
+    protected function getServicesData(): array
     {
-        $data = [];
-
         /** @var KernelInterface $kernel */
         $kernel = $this->getService('kernel');
 
-        /** @var PackageInterface $package */
-        foreach ($kernel->getPackages() as $package) {
-            $path = $package->getServicesConfigPath();
+        $dataLoader = new DataLoader($kernel, $this);
 
-            if (!empty($path) && is_dir($path)) {
-                /** @var ConfigLoaderInterface $configLoader */
-                $configLoader = $this->getPackageLoader($package);
-
-                CollectionTool::merge($data, $configLoader->load($path));
-            }
-        }
-
-        foreach ($this->additionalServicesData as $additionalData) {
-            CollectionTool::merge($data, $additionalData);
-        }
-
-        return $data;
+        return $dataLoader->getData('getServicesConfigPath', 'services', $this->additionalServicesData);
     }
 
     /**
      * @return Compilator
      */
-    protected function buildSpecCompilator()
+    protected function buildSpecCompilator(): Compilator
     {
         return new Compilator([
             new InheritanceCompiler(),

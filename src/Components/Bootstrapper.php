@@ -12,7 +12,6 @@ use ROrier\Core\Features\Bootstrappers\ContainerBootstrapperTrait;
 use ROrier\Core\Features\Bootstrappers\KernelBootstrapperTrait;
 use ROrier\Core\Features\Bootstrappers\LibraryBootstrapperTrait;
 use ROrier\Core\Features\Bootstrappers\ParametersBootstrapperTrait;
-use ROrier\Core\Interfaces\ConfigLoaderInterface;
 use ROrier\Core\Main;
 
 class Bootstrapper
@@ -51,6 +50,8 @@ class Bootstrapper
         'builders' => self::DEFAULT_BUILDERS_CONFIGURATION
     ];
 
+    protected const DEFAULT_MASK = 0644;
+
     protected const CUSTOM_CONFIGURATION = [];
 
     protected array $services = [];
@@ -59,7 +60,7 @@ class Bootstrapper
 
     protected array $requestedServiceBuilding = [];
 
-    protected array $configLoaders = [];
+    protected ?string $var_cache_folder = null;
 
     /**
      * Bootstrapper constructor.
@@ -69,6 +70,15 @@ class Bootstrapper
     {
         CollectionTool::merge($this->config, static::CUSTOM_CONFIGURATION);
         CollectionTool::merge($this->config, $runtimeConfiguration);
+
+        if (isset($this->config['var_cache_folder'])) {
+            $src = $this->config['var_cache_folder'];
+            $mask = $this->config['var_cache_mask'] ?? static::DEFAULT_MASK;
+
+            if ($this->buildCacheFolder($src, $mask)) {
+                $this->var_cache_folder = $src;
+            }
+        }
     }
 
     /**
@@ -114,16 +124,17 @@ class Bootstrapper
         return call_user_func([$this, $builders[$name]]);
     }
 
-    /**
-     * @param string $className
-     * @return ConfigLoaderInterface
-     */
-    protected function getConfigLoader(string $className): ConfigLoaderInterface
+    public function getCacheFolder(): ?string
     {
-        if (!isset($this->configLoaders[$className])) {
-            $this->configLoaders[$className] = new $className();
+        return $this->var_cache_folder;
+    }
+
+    protected function buildCacheFolder(string $src, int $mask = self::DEFAULT_MASK): bool
+    {
+        if (is_dir($src)) {
+            return true;
         }
 
-        return $this->configLoaders[$className];
+        return mkdir($src, $mask, true);
     }
 }
