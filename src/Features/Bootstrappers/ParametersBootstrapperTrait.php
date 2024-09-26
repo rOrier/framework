@@ -58,7 +58,7 @@ trait ParametersBootstrapperTrait
 
         $dataLoader = new DataLoader($kernel, $this);
 
-        $data = $dataLoader->getData('getParametersConfigPath', 'parameters', $this->additionalServicesData);
+        $data = $dataLoader->getData('getParametersConfigPath', 'parameters', $this->additionalParametersData);
 
         return new Bag($data);
     }
