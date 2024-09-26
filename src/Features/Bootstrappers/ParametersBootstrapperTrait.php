@@ -12,9 +12,8 @@ use ROrier\Config\Services\ConfigParsers\EnvParser;
 use ROrier\Config\Services\ConfigParsers\StringParameterParser;
 use ROrier\Config\Services\DelayedProxies\ParametersProxy;
 use ROrier\Config\Services\Parameters;
-use ROrier\Core\Interfaces\ConfigLoaderInterface;
+use ROrier\Core\Components\DataLoader;
 use ROrier\Core\Interfaces\KernelInterface;
-use ROrier\Core\Interfaces\PackageInterface;
 
 trait ParametersBootstrapperTrait
 {
@@ -54,53 +53,14 @@ trait ParametersBootstrapperTrait
 
     protected function getParametersData(): Bag
     {
-        if ($this->getCacheFolder()) {
-            $src = $this->getCacheFolder() . DIRECTORY_SEPARATOR . 'parameters.json';
-            if (is_file($src)) {
-                $jsonData = json_decode(file_get_contents($src), true);
-                if (is_array($jsonData)) {
-                    return new Bag($jsonData);
-                }
-            }
-        }
-
-        $data = $this->buildParametersData();
-
-        if ($this->getCacheFolder()) {
-            $src = $this->getCacheFolder() . DIRECTORY_SEPARATOR . 'parameters.json';
-            file_put_contents($src, json_encode($data->toArray()));
-        }
-
-        return $data;
-    }
-
-    /**
-     * @return Bag
-     */
-    protected function buildParametersData(): Bag
-    {
-        $data = new Bag();
-
         /** @var KernelInterface $kernel */
         $kernel = $this->getService('kernel');
 
-        /** @var PackageInterface $package */
-        foreach ($kernel->getPackages() as $package) {
-            $path = $package->getParametersConfigPath();
+        $dataLoader = new DataLoader($kernel, $this);
 
-            if (!empty($path) && is_dir($path)) {
-                /** @var ConfigLoaderInterface $configLoader */
-                $configLoader = $this->getPackageLoader($package);
+        $data = $dataLoader->getData('getParametersConfigPath', 'parameters', $this->additionalServicesData);
 
-                $data->merge($configLoader->load($path));
-            }
-        }
-
-        foreach ($this->additionalParametersData as $additionalData) {
-            $data->merge($additionalData);
-        }
-
-        return $data;
+        return new Bag($data);
     }
 
     /**
