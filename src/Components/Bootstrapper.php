@@ -46,6 +46,7 @@ class Bootstrapper
         'root' => null,
         'main_class_name' => Main::class,
         'app_class_name' => App::class,
+        'kernel' => ['override' => true],
         'packages' => self::DEFAULT_PACKAGES,
         'builders' => self::DEFAULT_BUILDERS_CONFIGURATION
     ];
