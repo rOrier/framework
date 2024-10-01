@@ -22,6 +22,16 @@ class Kernel implements KernelInterface
 
         $this->packages[] = $package;
 
+        usort($this->packages, function (PackageInterface $p1, PackageInterface $p2) {
+            if ($p1->getPriority() < $p2->getPriority()) {
+                return -1;
+            } elseif ($p1->getPriority() > $p2->getPriority()) {
+                return 1;
+            }
+
+            return 0;
+        });
+
         return $this;
     }
 
