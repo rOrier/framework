@@ -141,6 +141,6 @@ class Bootstrapper
             return true;
         }
 
-        return mkdir($src, $mask, true);
+        return @mkdir($src, $mask, true);
     }
 }
