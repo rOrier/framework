@@ -17,6 +17,11 @@ interface PackageInterface extends ArrayAccess
     public function getName(): string;
 
     /**
+     * @return int
+     */
+    public function getPriority(): int;
+
+    /**
      * @return string
      */
     public function getParametersConfigPath(): string;

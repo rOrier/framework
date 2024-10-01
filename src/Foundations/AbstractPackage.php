@@ -9,9 +9,18 @@ use ROrier\Core\Interfaces\PackageInterface;
 
 abstract class AbstractPackage implements PackageInterface
 {
+    const PRIORITY_FIRST = 1;
+    const PRIORITY_VERY_HIGH = 2;
+    const PRIORITY_HIGH = 3;
+    const PRIORITY_MEDIUM = 5;
+    const PRIORITY_LOW = 7;
+    const PRIORITY_VERY_LOW = 8;
+    const PRIORITY_LAST = 9;
+
     private const DEFAULT_CONFIGURATION = [
         'name' => null,
         'root' => null,
+        'priority' => self::PRIORITY_MEDIUM,
         'loader' => [
             'class' => null,
             'type' => 'yaml'
@@ -83,6 +92,14 @@ abstract class AbstractPackage implements PackageInterface
     public function getName(): string
     {
         return $this['name'];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPriority(): int
+    {
+        return $this['priority'];
     }
 
     /**

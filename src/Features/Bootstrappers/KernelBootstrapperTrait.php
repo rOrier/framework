@@ -5,6 +5,7 @@ namespace ROrier\Core\Features\Bootstrappers;
 use Exception;
 use ROrier\Core\Components\Kernel;
 use ROrier\Core\Interfaces\KernelInterface;
+use ROrier\Core\Main;
 
 trait KernelBootstrapperTrait
 {
@@ -30,7 +31,7 @@ trait KernelBootstrapperTrait
      */
     protected function buildKernel(): KernelInterface
     {
-        $kernel = new Kernel();
+        $kernel = $this->getKernel();
 
         $classNames = array_unique(array_merge(
             $this->config['packages'],
@@ -39,7 +40,20 @@ trait KernelBootstrapperTrait
 
         foreach ($classNames as $className) {
             $package = new $className();
-            $kernel->addPackage($package);
+            if (!$kernel->hasPackage($package->getName())) {
+                $kernel->addPackage($package);
+            }
+        }
+
+        return $kernel;
+    }
+
+    protected function getKernel(): KernelInterface
+    {
+        if (Main::ready() && !$this->config['kernel']['override']) {
+            $kernel = Main::app()->getKernel();
+        } else {
+            $kernel = new Kernel();
         }
 
         return $kernel;

@@ -24,7 +24,7 @@ class DataLoader
 
     public function getData(string $getPathMethod, string $cacheFile, array $additionalDataSet = []): array
     {
-        if ($this->bootstrapper->getCacheFolder()) {
+        if ($this->bootstrapper->isCacheActivated()) {
             $src = $this->bootstrapper->getCacheFolder() . DIRECTORY_SEPARATOR . $cacheFile . '.json';
             if (is_file($src)) {
                 $jsonData = json_decode(file_get_contents($src), true);
@@ -40,7 +40,7 @@ class DataLoader
             CollectionTool::merge($data, $additionalData);
         }
 
-        if ($this->bootstrapper->getCacheFolder()) {
+        if ($this->bootstrapper->isCacheActivated()) {
             $src = $this->bootstrapper->getCacheFolder() . DIRECTORY_SEPARATOR . $cacheFile . '.json';
             file_put_contents($src, json_encode($data));
         }

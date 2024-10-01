@@ -46,6 +46,7 @@ class Bootstrapper
         'root' => null,
         'main_class_name' => Main::class,
         'app_class_name' => App::class,
+        'kernel' => ['override' => true],
         'packages' => self::DEFAULT_PACKAGES,
         'builders' => self::DEFAULT_BUILDERS_CONFIGURATION
     ];
@@ -122,6 +123,11 @@ class Bootstrapper
         $this->requestedServiceBuilding[] = $name;
 
         return call_user_func([$this, $builders[$name]]);
+    }
+
+    public function isCacheActivated(): ?string
+    {
+        return (($this->var_cache_folder !== null) && !Main::ready());
     }
 
     public function getCacheFolder(): ?string

@@ -20,7 +20,17 @@ class Kernel implements KernelInterface
             throw new Exception("Package '{$package->getName()}' already registered.");
         }
 
-        $this->packages[$package->getName()] = $package;
+        $this->packages[] = $package;
+
+        usort($this->packages, function (PackageInterface $p1, PackageInterface $p2) {
+            if ($p1->getPriority() < $p2->getPriority()) {
+                return -1;
+            } elseif ($p1->getPriority() > $p2->getPriority()) {
+                return 1;
+            }
+
+            return 0;
+        });
 
         return $this;
     }
@@ -30,7 +40,13 @@ class Kernel implements KernelInterface
      */
     public function hasPackage(string $name): bool
     {
-        return isset($this->packages[$name]);
+        foreach ($this->packages as $package) {
+            if ($package->getName() === $name) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -38,11 +54,13 @@ class Kernel implements KernelInterface
      */
     public function getPackage(string $name): ?PackageInterface
     {
-        if (!$this->hasPackage($name)) {
-            throw new Exception("Package '$name' not found.");
+        foreach ($this->packages as $package) {
+            if ($package->getName() === $name) {
+                return $package;
+            }
         }
 
-        return $this->packages[$name];
+        return null;
     }
 
     /**
