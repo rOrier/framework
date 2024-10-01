@@ -125,6 +125,11 @@ class Bootstrapper
         return call_user_func([$this, $builders[$name]]);
     }
 
+    public function isCacheActivated(): ?string
+    {
+        return (($this->var_cache_folder !== null) && !Main::ready());
+    }
+
     public function getCacheFolder(): ?string
     {
         return $this->var_cache_folder;
