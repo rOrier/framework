@@ -127,6 +127,7 @@ abstract class AbstractPackage implements PackageInterface
      * @param mixed $value
      * @throws Exception
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         throw new Exception("Package configuration is read only.");
@@ -136,6 +137,7 @@ abstract class AbstractPackage implements PackageInterface
      * @param mixed $offset
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return isset($this->config[$offset]);
@@ -145,6 +147,7 @@ abstract class AbstractPackage implements PackageInterface
      * @param mixed $offset
      * @throws Exception
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         throw new Exception("Package configuration is read only.");
@@ -154,6 +157,7 @@ abstract class AbstractPackage implements PackageInterface
      * @param mixed $offset
      * @return array|bool|mixed|null
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->config[$offset];
